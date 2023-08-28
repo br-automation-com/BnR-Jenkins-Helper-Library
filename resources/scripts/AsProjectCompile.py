@@ -23,10 +23,14 @@ import re
 import subprocess
 
 def PrintErorrsAndWarnings(output):
-    regex = re.compile(r'.*(error|warning) \d*:.*')
+    regex = re.compile(r'.*(?P<result>error|warning) \d*:.*')
     for l in output:
-        if (regex.match(l) != None):
-            print(l)
+        matches = re.search(regex, l)
+        if (matches != None):
+            if (matches.group('result')) == 'error':
+                print(f'\033[91m {l} \033[0m')
+            elif (matches.group('result')) == 'warning':
+                print(f'\033[92m {l} \033[0m')
 
 def Compile(Project, Configuration, BuildPIP):
     __projectPath = Project._projectDir
