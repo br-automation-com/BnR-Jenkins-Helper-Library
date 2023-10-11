@@ -57,27 +57,27 @@ def restartArSim() -> bool:
             print(e)
             pass
 
-def readTests() -> []:
+def readTests(port) -> []:
     print('reading the available unit tests')
-    resp = requests.get('http://127.0.0.1:80/WsTest/')
+    resp = requests.get(f'http://127.0.0.1:{port}/WsTest/')
     if (resp.status_code != requests.codes.ok):
         return []
     #print('found these tests available')
     availableTests = []
     for test in resp.json()['itemList']:
         availableTests.append(test['device'])
-        print('{} {}'.format(test['device'], test['description']))
+        print(f'{test["device"]} {test["description"]}')
     return availableTests
 
 def cleanTestDir(directory):
     print('cleaning the test results directory')
-    contents = [os.path.join(directory, i) for i in os.listdir(directory)]
-    [os.remove(i) if os.path.isfile(i) or os.path.islink(i) else shutil.rmtree(i) for i in contents]
+    contents = [path.join(directory, i) for i in os.listdir(directory)]
+    [os.remove(i) if path.isfile(i) or path.islink(i) else shutil.rmtree(i) for i in contents]
 
-def runTest(name, output) -> bool:
+def runTest(name, output, port) -> bool:
     print(f'running test{name}')
     try:
-        resp = requests.get(f'http://127.0.0.1:80/WsTest/{name}')
+        resp = requests.get(f'http://127.0.0.1:{port}/WsTest/{name}')
         if (resp.status_code != requests.codes.ok):
             print('invalid response ' + str(resp.status_code))
             return False
@@ -90,7 +90,7 @@ def runTest(name, output) -> bool:
         s.failures += 1
         s.add_testcase(c)
         f.add_testsuite(s)
-        f.write(f'{output}\\{name}.xml')
+        f.write(path.join(output, f'{name}.xml'))
         return False
 
     xml = JUnitXml.fromstring(resp.text.replace('encoding="utf-8"', ''))
@@ -106,28 +106,23 @@ def runTest(name, output) -> bool:
                 if (int(p.value) > 0):
                     failed = True
         for ts in suite.testsuites():
-            sts = TestSuite(ts.name)
             for case in ts:
                 #print(f'adding {case}')
-                sts.add_testcase(case)
-            s.add_testsuite(sts)
-            s.tests += sts.tests
-            s.failures += sts.failures
-        #for case in suite:
-            #print(f'adding {case}')
-            #s.add_testcase(case)
+                s.add_testcase(case)
+            s.tests += s.tests
+            s.failures += s.failures
         f.add_testsuite(s)
         if (s.tests > 0):
-            f.write(f'{output}\\{suite.name}.xml')
-    #print(resp.text)
+            f.write(path.join(output, f'{suite.name}.xml'))
     return failed
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--test', help='test to run', dest='testName', required=True)
     parser.add_argument('-o', '--output', help='directory to store the results', dest='output', required=False, default='TestResults')
+    parser.add_argument('-p', '--port', help='port number that ArSim is running the webserver on', dest='port', required=False, default=80)
     args = parser.parse_args()
-    availableTests = readTests()
+    availableTests = readTests(args.port)
 
     if (path.isdir(f'{args.output}') == False):
         os.mkdir(f'{args.output}')
@@ -136,15 +131,15 @@ def main() -> None:
     failedTests = []
     if (args.testName == 'all'):
         for t in availableTests:
-            print('running test ' + t)
-            if (runTest(t, args.output) == True):
+            print(f'running test {t}')
+            if (runTest(t, args.output, args.port) == True):
                 failedTests.append(t)
     elif (args.testName in availableTests):
-        if (runTest(args.testName, args.output) == True):
+        if (runTest(args.testName, args.output, args.port) == True):
             failedTests.append(args.testName)
 
     for t in failedTests:
-        print(t + ' test failed')
+        print(f'{t} test failed')
 
     # use the junit command in jenkins to parse the results, so that the results can conditionally fail the build
     #sys.exit(0 if len(failedTests) == 0 else 1)
