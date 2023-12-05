@@ -1,3 +1,4 @@
 def call(Map config = [:]){
-    junit(testResults: '**/TestResults/*.xml');
+    config.testResults = config.testResults ?: 'TestResults'
+    junit(testResults: "**/${config.testResults}/*.xml");
 }

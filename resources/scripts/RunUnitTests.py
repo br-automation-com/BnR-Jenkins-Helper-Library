@@ -1,7 +1,7 @@
 import sys
 import argparse
 import requests
-from junitparser import JUnitXml, TestCase, TestSuite, Skipped, Error
+from junitparser import JUnitXml, TestCase, TestSuite, Skipped, Error, Element
 import os
 from os import path
 import shutil
@@ -74,6 +74,16 @@ def cleanTestDir(directory):
     contents = [path.join(directory, i) for i in os.listdir(directory)]
     [os.remove(i) if path.isfile(i) or path.islink(i) else shutil.rmtree(i) for i in contents]
 
+class CustomElement(Element):
+    _tag = 'system-out'
+    @property
+    def text(self):
+        return self._elem.text
+
+    @text.setter
+    def text(self, value: str):
+        self._elem.text = value
+
 def runTest(name, output, port) -> bool:
     print(f'running test{name}')
     try:
@@ -109,6 +119,8 @@ def runTest(name, output, port) -> bool:
             for case in ts:
                 #print(f'adding {case}')
                 s.add_testcase(case)
+                for custom in case.iterchildren(CustomElement):
+                    print(custom.text)
             s.tests += s.tests
             s.failures += s.failures
         f.add_testsuite(s)
