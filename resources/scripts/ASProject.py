@@ -88,7 +88,7 @@ class ASLibrary:
         self._projectDir = projectDir
         self._configurations = configurations
         libraryFile = [f for f in listdir(directory) if f.endswith('.lby')][0]
-        root = ET.parse(directory + '\\' + libraryFile).getroot()
+        root = ET.parse(os.path.join(directory, libraryFile)).getroot()
         self._type = root.get('SubType')
         self._description = root.get('Description')
         if (self._description is None):
@@ -117,17 +117,15 @@ class ASLibrary:
                 self._dependencies.append(d.get('ObjectName'))
 
     def export(self, directory):
-        if (directory.endswith('\\') == False):
-            directory = directory + '\\'
 
         with tempfile.TemporaryDirectory() as tmpdirname:
-            exportDir = tmpdirname + '\\' + self._version
+            exportDir = os.path.join(tmpdirname, self._version)
             os.mkdir(exportDir)
-            [shutil.copyfile(self._directory + '\\' + f, exportDir + '\\' + f) for f in self._files if (ASLibrary.__isSourceFile(f) == False)]
+            [shutil.copyfile(os.path.join(self._directory, f), os.path.join(exportDir, f)) for f in self._files if (ASLibrary.__isSourceFile(f) == False)]
             ET.register_namespace('', 'http://br-automation.co.at/AS/Library')
             libraryFile = [f for f in listdir(self._directory) if f.endswith('.lby')][0]
-            shutil.copyfile(self._directory + '\\' + libraryFile, exportDir + '\\Binary.lby')
-            tree = ET.parse(exportDir + '\\Binary.lby')
+            shutil.copyfile(os.path.join(self._directory, libraryFile), os.path.join(exportDir, 'Binary.lby'))
+            tree = ET.parse(os.path.join(exportDir, 'Binary.lby'))
             tree.getroot().set('SubType', 'Binary')
             tree.getroot().set('Description', self._description)
             files = tree.getroot().find(ASLibrary.Namespace() + 'Files')
@@ -137,31 +135,37 @@ class ASLibrary:
                 files = tree.getroot().find(ASLibrary.Namespace() + 'Objects')
                 [files.remove(f) for f in files.findall(ASLibrary.Namespace() + 'Object') if ((f.get('Type') != 'File') or (ASLibrary.__isSourceFile(f.text)))]
                 
-            tree.write(exportDir + '\\Binary.lby', xml_declaration=True, encoding='utf-8')
+            tree.write(os.path.join(exportDir, 'Binary.lby'), xml_declaration=True, encoding='utf-8')
 
-            os.mkdir(exportDir + '\\SG3')
-            os.mkdir(exportDir + '\\SGC')
-            os.mkdir(exportDir + '\\SG4')
+            os.mkdir(os.path.join(exportDir, 'SG3'))
+            os.mkdir(os.path.join(exportDir, 'SGC'))
+            os.mkdir(os.path.join(exportDir, 'SG4'))
+
             #Copy Help folder if it exists
-            if (os.path.exists(self._directory  + '\\Help')): 
-                os.mkdir(exportDir + '\\Help')
-                shutil.copyfile(self._directory  + '\\Help\\Lib' + self.name + '.chm', exportDir + '\\Help\\Lib' + self.name + '.chm')
+            if (os.path.exists(os.path.join(self._directory, 'Help'))): 
+                os.mkdir(os.path.join(exportDir, 'Help'))
+                shutil.copyfile(os.path.join(self._directory, 'Help', 'Lib' + self.name + '.chm'), os.path.join(exportDir, 'Help', 'Lib' + self.name + '.chm'))
 
-            shutil.copyfile(self._projectDir + '\\Temp\\Includes\\' + self.name + '.h', exportDir + '\\SG3\\' + self.name + '.h')
-            shutil.copyfile(self._projectDir + '\\Temp\\Includes\\' + self.name + '.h', exportDir + '\\SGC\\' + self.name + '.h')
-            shutil.copyfile(self._projectDir + '\\Temp\\Includes\\' + self.name + '.h', exportDir + '\\SG4\\' + self.name + '.h')
             for c in self._configurations:
                 config = self._configurations[c]
-                if (os.path.isfile(self._projectDir + '\\Temp\\Objects\\' + config._name + '\\ConfigurationOptions.opt') == False):
+                tempFolder = os.path.join('C:', 'Temp', config._name) if (os.path.exists(os.path.join('C:', 'Temp',  config._name))) else os.path.join(self._projectDir, 'Temp')
+                if (os.path.exists(os.path.join(tempFolder, 'Includes', self.name + '.h')) == False):
                     continue
-                root = ET.parse(self._projectDir + '\\Temp\\Objects\\' + config._name + '\\ConfigurationOptions.opt').getroot()
-                target = root.get('Target')
-                shutil.copyfile(self._projectDir + '\\Temp\\Archives\\' + config._name + '\\' + config._cpuName + '\\lib' + self.name + '.a', exportDir + '\\' + target + '\\lib' + self.name + '.a')
-                shutil.copyfile(self._projectDir + '\\Binaries\\' + config._name + '\\' + config._cpuName + '\\' + self.name + '.br', exportDir + '\\' + target + '\\' + self.name + '.br')
 
-            if (os.path.exists(directory + self.name + '\\' + self._version)):
-                shutil.rmtree(directory + self.name + '\\' + self._version)
-            shutil.copytree(exportDir, directory + self.name + '\\' + self._version)
+                shutil.copyfile(os.path.join(tempFolder, 'Includes', self.name + '.h'), os.path.join(exportDir, 'SG3', self.name + '.h'))
+                shutil.copyfile(os.path.join(tempFolder, 'Includes', self.name + '.h'), os.path.join(exportDir, 'SGC', self.name + '.h'))
+                shutil.copyfile(os.path.join(tempFolder, 'Includes', self.name + '.h'), os.path.join(exportDir, 'SG4', self.name + '.h'))
+            
+                if (os.path.isfile(os.path.join(tempFolder, 'Objects', config._name, 'ConfigurationOptions.opt')) == False):
+                    continue
+                root = ET.parse(os.path.join(tempFolder, 'Objects', config._name, 'ConfigurationOptions.opt')).getroot()
+                target = root.get('Target')
+                shutil.copyfile(os.path.join(tempFolder, 'Archives', config._name, config._cpuName, 'lib' + self.name + '.a'), os.path.join(exportDir, target, 'lib' + self.name + '.a'))
+                shutil.copyfile(os.path.join(self._projectDir, 'Binaries', config._name, config._cpuName, self.name + '.br'), os.path.join(exportDir, target, self.name + '.br'))
+
+            if (os.path.exists(os.path.join(str(directory) + self.name, self._version))):
+                shutil.rmtree(os.path.join(str(directory) + self.name, self._version))
+            shutil.copytree(exportDir, os.path.join(str(directory) + self.name, self._version))
 
 class ASPackage:
     @staticmethod
@@ -178,21 +182,21 @@ class ASPackage:
         self.tasks = []
         self.files = []
         self.libraries = []
-        if (os.path.exists(directory + '\\Package.pkg') == False): 
+        if (os.path.exists(os.path.join(directory, 'Package.pkg')) == False): 
             return
-        objects = ET.parse(directory + '\\Package.pkg').getroot().find(ASPackage.Namespace() + 'Objects')
+        objects = ET.parse(os.path.join(directory, 'Package.pkg')).getroot().find(ASPackage.Namespace() + 'Objects')
         for o in objects.findall(ASPackage.Namespace() + 'Object'):
-            if ((os.path.isdir(self._directory + '\\' + o.text)) and (o.get('Type') == ASPackage.Type())):
-                self.packages.append(ASPackage(o.text, self._directory + '\\' + o.text, projectDir, configurations))
-            elif ((os.path.isdir(self._directory + '\\' + o.text)) and (o.get('Type') == ASLibrary.Type())):
+            if ((os.path.isdir(os.path.join(self._directory, o.text))) and (o.get('Type') == ASPackage.Type())):
+                self.packages.append(ASPackage(o.text, os.path.join(self._directory, o.text), projectDir, configurations))
+            elif ((os.path.isdir(os.path.join(self._directory, o.text))) and (o.get('Type') == ASLibrary.Type())):
                 try:
                     description = o.attrib['Description']
-                    self.libraries.append(ASLibrary(o.text, self._directory + '\\' + o.text, projectDir, configurations, description))
+                    self.libraries.append(ASLibrary(o.text, os.path.join(self._directory, o.text), projectDir, configurations, description))
                 except:
-                    self.libraries.append(ASLibrary(o.text, self._directory + '\\' + o.text, projectDir, configurations))
-            elif ((os.path.isdir(self._directory + '\\' + o.text)) and (o.get('Type') == ASTask.Type())):
-                self.tasks.append(ASTask(o.text, self._directory + '\\' + o.text))
-            elif ((os.path.isfile(self._directory + '\\' + o.text)) and (o.get('Type') == 'File')):
+                    self.libraries.append(ASLibrary(o.text, os.path.join(self._directory, o.text), projectDir, configurations))
+            elif ((os.path.isdir(os.path.join(self._directory, o.text))) and (o.get('Type') == ASTask.Type())):
+                self.tasks.append(ASTask(o.text, os.path.join(self._directory, o.text)))
+            elif ((os.path.isfile(os.path.join(self._directory, o.text))) and (o.get('Type') == 'File')):
                 self.files.append(o.text)
 
 class ASConfiguration:
@@ -211,6 +215,7 @@ class ASConfiguration:
     @staticmethod
     def Type():
         return 'Configuration'
+    
 
     @staticmethod
     def __ioType(type):
@@ -232,27 +237,31 @@ class ASConfiguration:
         self.readCpuName()
         self.readARVersion()
         self.readPLCType()
-        self.__ioMapFile = directory + '\\' + self._cpuName + '\\IoMap.iom'
+        self.__ioMapFile = os.path.join(directory, self._cpuName, 'IoMap.iom')
         self.findIoModules()
         self.readIoMapp()
         #print ('added ' + name)
 
+    def TempDirectory(self):
+        projectTemp = os.path.join(self._directory, '..', '..', 'Temp')
+        return rf'{projectTemp}' if os.path.exists(projectTemp) else os.path.join('C:\\', 'Temp', self._name)
+    
     def findIoModules(self):
-        modules = [module for module in ET.parse(self._directory + '\\Hardware.hw').getroot().findall(IoModule.Namespace() + 'Module') if IoModule.isIoModule(module.get('Type'))]
+        modules = [module for module in ET.parse(os.path.join(self._directory, 'Hardware.hw')).getroot().findall(IoModule.Namespace() + 'Module') if IoModule.isIoModule(module.get('Type'))]
         for m in modules:
             self._modules.append(IoModule(m.get('Name')))
 
     def readCpuName(self):
-        file = self._directory + '\\Config.pkg'
+        file = os.path.join(self._directory, 'Config.pkg')
         objects = ET.parse(file).getroot().find(ASConfiguration.ConfigurationNamespace() + 'Objects')
         self._cpuName = [o.text for o in objects.findall(ASConfiguration.ConfigurationNamespace() + 'Object') if o.get('Type') == 'Cpu'][0]
 
     def readARVersion(self):
-        cpu = ET.parse(self._directory + rf'\{self._cpuName}\Cpu.pkg').getroot().find(ASConfiguration.CpuNamespace() + 'Configuration')
+        cpu = ET.parse(os.path.join(self._directory, rf'{self._cpuName}', 'Cpu.pkg')).getroot().find(ASConfiguration.CpuNamespace() + 'Configuration')
         self._arVersion = cpu.find(ASConfiguration.CpuNamespace() + 'AutomationRuntime').get('Version')
 
     def readPLCType(self):
-        self._plcType = ET.parse(self._directory + rf'\{self._cpuName}\Cpu.pkg').getroot().find(ASConfiguration.CpuNamespace() + 'Configuration').get('ModuleId')
+        self._plcType = ET.parse(os.path.join(self._directory, rf'{self._cpuName}', 'Cpu.pkg')).getroot().find(ASConfiguration.CpuNamespace() + 'Configuration').get('ModuleId')
 
     def findIOModule(self, modules, name) -> IoModule:
         for m in self._modules:
@@ -290,24 +299,32 @@ class ASProject:
                 return file
 
     @staticmethod
-    def __version(projectDir):
+    def _version(projectDir):
         for file in os.listdir(projectDir):
             if file.endswith('.apj'):
-                apj = open(projectDir + '\\' + file).read()
-                return str(re.findall('<?AutomationStudio Version="(.*)"', apj)[0])
+                apj = open(os.path.join(projectDir, file)).read()
+                return str(re.findall(r'<?AutomationStudio Version="([\d\.]*)"', apj)[0])
+
+    @staticmethod
+    def _workingVersion(projectDir):
+        for file in os.listdir(projectDir):
+            if file.endswith('.apj'):
+                apj = open(os.path.join(projectDir, file)).read()
+                return str(re.findall(r'WorkingVersion="([\d\.]*)"', apj)[0])
 
     version = []
     def __init__(self, projectDir):
         self._projectDir = projectDir
-        self.version = ASProject.__version(projectDir)
+        self.version = ASProject._version(projectDir)
+        self.workingVersion = ASProject._workingVersion(projectDir)
         self.projectName = ASProject.__projectName(projectDir)
         self._configurations = {}
-        objects = ET.parse(projectDir + '\\Physical\\Physical.pkg').getroot().find(ASConfiguration.Namespace() + 'Objects')
-        [self.addConfiguration(ASConfiguration(o.text, projectDir + '\\Physical\\' + o.text)) for o in objects.findall(ASConfiguration.Namespace() + 'Object') if ((os.path.isdir(projectDir + '\\Physical\\' + o.text)) and (o.get('Type') == ASConfiguration.Type()))]
+        objects = ET.parse(os.path.join(projectDir, 'Physical', 'Physical.pkg')).getroot().find(ASConfiguration.Namespace() + 'Objects')
+        [self.addConfiguration(ASConfiguration(o.text, os.path.join(projectDir, 'Physical', o.text))) for o in objects.findall(ASConfiguration.Namespace() + 'Object') if ((os.path.isdir(os.path.join(projectDir, 'Physical', o.text))) and (o.get('Type') == ASConfiguration.Type()))]
 
         self._packages = []
-        objects = ET.parse(projectDir + '\\Logical\\Package.pkg').getroot().find(ASPackage.Namespace() + 'Objects')
-        [self.addPackage(ASPackage(o.text, projectDir + '\\Logical\\' + o.text, projectDir, self._configurations)) for o in objects.findall(ASPackage.Namespace() + 'Object') if ((os.path.isdir(projectDir + '\\Logical\\' + o.text)) and (o.get('Type') == ASPackage.Type()))]
+        objects = ET.parse(os.path.join(projectDir, 'Logical', 'Package.pkg')).getroot().find(ASPackage.Namespace() + 'Objects')
+        [self.addPackage(ASPackage(o.text, os.path.join(projectDir, 'Logical', o.text), projectDir, self._configurations)) for o in objects.findall(ASPackage.Namespace() + 'Object') if ((os.path.isdir(os.path.join(projectDir, 'Logical', o.text))) and (o.get('Type') == ASPackage.Type()))]
 
     def addConfiguration(self, configuration):
         self._configurations[configuration._name] = configuration
@@ -324,9 +341,9 @@ class ASProject:
             return False
 
     def CleanProject(self):
-        removeDir(self._projectDir + r'\Binaries')
-        removeDir(self._projectDir + r'\Temp')
-        removeDir(self._projectDir + r'\Diagnosis')
+        removeDir(os.path.join(self._projectDir, 'Binaries'))
+        removeDir(os.path.join(self._projectDir, 'Temp'))
+        removeDir(os.path.join(self._projectDir, 'Diagnosis'))
 
     def findLibrary(self, libraryName):
         for package in self._packages:
@@ -349,11 +366,8 @@ class ASProject:
         return False
 
     def export(self, files, directory, name):
-        if (directory.endswith('\\') == False):
-            directory = directory + '\\'
-
         with tempfile.TemporaryDirectory() as tmpdirname:
-            exportDir = tmpdirname + '\\' + name
+            exportDir = os.path.join(tmpdirname, name)
             os.mkdir(exportDir)
             for f in files:
                 shutil.copytree(exportDir, f)

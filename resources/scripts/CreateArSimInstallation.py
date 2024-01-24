@@ -18,20 +18,17 @@ def CreateSimulationTarget(Project, Configuration, ArSimDir) -> bool:
     cleanCommand = (__compileAsPath + r'\Bin-en\BR.AS.Build.exe'
                         + ' "' + __projectPath + '\\' + Project.projectName + '"'
                         + ' -cleanAll'
-                        + ' -t C:\\Temp\\' + Project._configurations[Configuration]._name
+                        + ' -t ' + Project._configurations[Configuration].TempDirectory()
                         )
-    print(cleanCommand)
     result = subprocess.run(cleanCommand, cwd=__projectPath, capture_output=True, text=True)
-    print(result.stdout)
-        
+
     buildCommand = (__compileAsPath + r'\Bin-en\BR.AS.Build.exe '
                         + '"' + __projectPath + '\\' + Project.projectName + '"'
                         + ' -buildMode "Build"'
                         + ' -c ' + Project._configurations[Configuration]._name
                         + ' -buildRUCPackage'
-                        + ' -t C:\\Temp\\' + Project._configurations[Configuration]._name
+                        + ' -t ' + Project._configurations[Configuration].TempDirectory()
                         )
-    print(buildCommand)
     result = subprocess.run(buildCommand, cwd=__projectPath, capture_output=True, text=True)
     print(result.stdout)
 

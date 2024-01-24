@@ -22,7 +22,7 @@ import tempfile
 import re
 import subprocess
 
-def PrintErorrsAndWarnings(output):
+def PrintErrorsAndWarnings(output):
     regex = re.compile(r'.*(?P<result>error|warning) \d*:.*')
     for l in output:
         matches = re.search(regex, l)
@@ -47,7 +47,7 @@ def Compile(Project, Configuration, BuildPIP):
             cleanCommand = (__compileAsPath + r'\Bin-en\BR.AS.Build.exe'
                                 + ' "' + __projectPath + '\\' + Project.projectName + '"'
                                 + ' -cleanAll'
-                                + ' -t C:\\Temp\\' + Project._configurations[config]._name
+                                + ' -t ' + Project._configurations[config].TempDirectory()
                                 )
             print(cleanCommand)
             result = subprocess.run(cleanCommand, cwd=__projectPath, capture_output=True, text=True)
@@ -57,7 +57,7 @@ def Compile(Project, Configuration, BuildPIP):
                                 + ' -buildMode "Build"'
                                 + ' -c ' + Project._configurations[config]._name
                                 + ' -buildRUCPackage'
-                                + ' -t C:\\Temp\\' + Project._configurations[config]._name
+                                + ' -t ' + Project._configurations[config].TempDirectory()
                                 )
             print(buildCommand)
             result = subprocess.run(buildCommand, cwd=__projectPath, capture_output=True, text=True)
@@ -71,7 +71,7 @@ def Compile(Project, Configuration, BuildPIP):
                 errors = int(r.group(1))
                 warnings = int(r.group(2))
                 if (errors > 0) or (warnings > 0):
-                    PrintErorrsAndWarnings(output)
+                    PrintErrorsAndWarnings(output)
             buildResult.append([Project._configurations[config]._name, result.returncode, errors, warnings])
 
             if (BuildPIP):
@@ -84,6 +84,7 @@ def Compile(Project, Configuration, BuildPIP):
                 pviTransferPath = __PVIpath + r'\PVI\Tools\PVITransfer\PVITransfer.exe'
                 pipCommand = (pviTransferPath + ' -silent "' + pilPath + '"')
                 result = subprocess.run(pipCommand, cwd=__projectPath, capture_output=True, text=True)
+                PrintErrorsAndWarnings(result.stdout.splitlines())
                 shutil.make_archive("PIP", 'zip', __projectPath + '\\' + "PIP")
                 
     return buildResult

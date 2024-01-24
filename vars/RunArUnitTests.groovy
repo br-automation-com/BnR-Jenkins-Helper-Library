@@ -7,4 +7,6 @@ def call(Map config = [:]){
     powershell(script: "python '${GetResources()}/scripts/StartArSim.py' --simulationDirectory '${config.project}/ArSim'");
     powershell(script: "python '${GetResources()}/scripts/RunUnitTests.py' --test ${config.tests} --output '${config.project}/${config.output}' --port ${config.port}");
     powershell(script: "python '${GetResources()}/scripts/StopArSim.py' --simulationDirectory '${config.project}/ArSim'");
+    powershell(script: "python '${GetResources()}/scripts/ProcessCodeCoverage.py' --project '${config.project}' --config '${config.configuration}'")
+    recordCoverage(sourceDirectories: [[path: "$PROJECT_DIR"]], tools: [[parser: 'COBERTURA', pattern: '**/report.xml']])
 }
