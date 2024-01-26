@@ -1,0 +1,850 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+    
+    
+      
+        <title>Build - B&R Jenkins Helper</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#build" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="B&amp;R Jenkins Helper" class="md-header__button md-logo" aria-label="B&R Jenkins Helper" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            B&R Jenkins Helper
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Build
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Version/index.md" class="md-tabs__link">
+          
+  
+  Section
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="B&amp;R Jenkins Helper" class="md-nav__button md-logo" aria-label="B&R Jenkins Helper" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    B&R Jenkins Helper
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Section
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Section
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Version/index.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    None
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Version/VersionFlowchart.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Page 1
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#asproject" class="md-nav__link">
+    <span class="md-ellipsis">
+      ASProject
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#asprojectcompile" class="md-nav__link">
+    <span class="md-ellipsis">
+      AsProjectCompile
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#createarsiminstallation" class="md-nav__link">
+    <span class="md-ellipsis">
+      CreateArSimInstallation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#export" class="md-nav__link">
+    <span class="md-ellipsis">
+      Export
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installedas" class="md-nav__link">
+    <span class="md-ellipsis">
+      InstalledAS
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#librarybuild" class="md-nav__link">
+    <span class="md-ellipsis">
+      LibraryBuild
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#moduleok" class="md-nav__link">
+    <span class="md-ellipsis">
+      ModuleOk
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#processcodecoverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      ProcessCodeCoverage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rununittests" class="md-nav__link">
+    <span class="md-ellipsis">
+      RunUnitTests
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#startarsim" class="md-nav__link">
+    <span class="md-ellipsis">
+      StartArSim
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stoparsim" class="md-nav__link">
+    <span class="md-ellipsis">
+      StopArSim
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="build">Build</h1>
+<h2 id="asproject">ASProject</h2>
+<p>Loads an Automation Studio project into a python class</p>
+<p><strong>Usage:</strong></p>
+<pre><code class="language-python">    project = ASProject(r'C:\project\TestProject')
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>projectDir</td>
+<td>String</td>
+<td>Full path to the Automation Studio project</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h2 id="asprojectcompile">AsProjectCompile</h2>
+<p>Builds an Automation Studio project</p>
+<p><strong>Usage:</strong></p>
+<pre><code class="language-console">    C:\&gt;python AsProjectCompile.py --project C:\project\TestProject --configuration arsim
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--project,<br>-p</td>
+<td>Full path to the Automation Studio project</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--configuration,<br>-c</td>
+<td>Name of the configuration to build</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--maxwarnings,<br>-w</td>
+<td>Max number of warning before the build is considered failed</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>--buildpip,<br>-b</td>
+<td>Whether to build the <strong>P</strong>roject <strong>I</strong>nstation <strong>P</strong>ackage</td>
+<td>False</td>
+</tr>
+</tbody>
+</table>
+<h2 id="createarsiminstallation">CreateArSimInstallation</h2>
+<p>Creates the ArSim install folder</p>
+<p><strong>Usage:</strong></p>
+<pre><code class="language-console">    C:\&gt;python CreateArSimInstallation.py --project C:\project\TestProject --configuration arsim --simulationDirectory C:\ArSim
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--project,<br>-p</td>
+<td>Full path to the Automation Studio project</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--configuration,<br>-c</td>
+<td>Name of the configuration to build</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--simulationDirectory,<br>-s</td>
+<td>Max number of warning before the build is considered failed</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h2 id="export">Export</h2>
+<p>Exports a zip file for importing with the mapp Framework Import tool</p>
+<p><strong>Usage:</strong></p>
+<pre><code class="language-console">    C:\&gt;python Export.py --project C:\project\TestProject --configuration Test.json --physical Physical\Simulation --output Installer
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--project,<br>-p</td>
+<td>Full path to the Automation Studio project</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--config,<br>-c</td>
+<td>Name of the configuration to build</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--physical,<br>-s</td>
+<td>Relative path to the physical directory location</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--output,<br>-o</td>
+<td>Output directory where the export files are saved to</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--zip,<br>-z</td>
+<td>Whether to zip the directory or not</td>
+<td>True</td>
+</tr>
+</tbody>
+</table>
+<h2 id="installedas">InstalledAS</h2>
+<p>Returns information on Installed Automation Studio versions</p>
+<p><strong>Usage:</strong></p>
+<pre><code class="language-python">    project = ASProject(r'C:\projects\Test')
+    asPath = InstalledAS.ASInstallPath(project)
+</code></pre>
+<h2 id="librarybuild">LibraryBuild</h2>
+<p>Exports a binary version of a library</p>
+<p><strong>Usage:</strong></p>
+<pre><code class="language-console">    C:\&gt;python LibraryBuild.py --project C:\project\TestProject --configuration arsim --library MyLib
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--project,<br>-p</td>
+<td>Full path to the Automation Studio project</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--config,<br>-c</td>
+<td>Name of the configuration to build</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--library,<br>-l</td>
+<td>Name of the library to build</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--directory,<br>-d</td>
+<td>Directory to store the compiled library</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h2 id="moduleok">ModuleOk</h2>
+<p>Verifies that all module's ModuleOK input is being monitored</p>
+<p><strong>Usage:</strong></p>
+<pre><code class="language-console">    C:\&gt;python ModuleOk.py --project C:\project\TestProject --configuration arsim
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--project,<br>-p</td>
+<td>Full path to the Automation Studio project</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--configuration,<br>-c</td>
+<td>Name of the configuration to build</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--output,<br>-o</td>
+<td>Whether to output a warning or an error if a ModuleOk is not monitored</td>
+<td>Warning</td>
+</tr>
+</tbody>
+</table>
+<h2 id="processcodecoverage">ProcessCodeCoverage</h2>
+<p>Generates a html and xml file with the code coverage data</p>
+<p><strong>Usage:</strong></p>
+<pre><code class="language-console">    C:\&gt;python ProcessCodeCoverage.py --project C:\project\TestProject --configuration arsim
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--project,<br>-p</td>
+<td>Full path to the Automation Studio project</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--config,<br>-c</td>
+<td>Name of the configuration to build</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--output,<br>-o</td>
+<td>Output directory for generated files</td>
+<td>CodeCoverage</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rununittests">RunUnitTests</h2>
+<p>Runs the unit tests in ArSim</p>
+<p><strong>Usage:</strong></p>
+<pre><code class="language-console">    C:\&gt;python RunUnitTests.py --test all
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--test,<br>-t</td>
+<td>Name of the tests to run (all to run all tests discovered)</td>
+<td>None</td>
+</tr>
+<tr>
+<td>--output,<br>-o</td>
+<td>Output directory to store the test results in</td>
+<td>TestsResults</td>
+</tr>
+<tr>
+<td>--port,<br>-p</td>
+<td>Port number that AR's webserver is running on</td>
+<td>80</td>
+</tr>
+</tbody>
+</table>
+<h2 id="startarsim">StartArSim</h2>
+<p>Starts an ArSim instance and wait for it to be in run mode before returning</p>
+<p><strong>Usage:</strong></p>
+<pre><code class="language-console">    C:\&gt;python StartArSim.py --simulationDirectory C:\ArSim
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--simulationDirectory,<br>-s</td>
+<td>Path to the ArSim installation directory to start</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<h2 id="stoparsim">StopArSim</h2>
+<p>Stops an ArSim instance</p>
+<p><strong>Usage:</strong></p>
+<pre><code class="language-console">    C:\&gt;python StopArSim.py --simulationDirectory C:\ArSim
+</code></pre>
+<p><strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>--simulationDirectory,<br>-s</td>
+<td>Path to the ArSim installation directory to start</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      
+    
+  </body>
+</html>
