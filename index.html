@@ -484,36 +484,36 @@
 <p>Groovy scripts can be called directly from your jenkins pipeline</p>
 <h3 id="general-purpose">General Purpose</h3>
 <ul>
-<li><a href="/groovy/general_purpose/#exportaslibrary">ExportASLibrary</a> - Exports a library from an Automation Studio project in binary format</li>
-<li><a href="/groovy/general_purpose/#frameworkexport">FrameworkExport</a> - Creates a zip file for importing using the mapp Framework Import tool</li>
-<li><a href="/groovy/general_purpose/#sendnotifications">SendNotifications</a> - Sends notifications to a MS Teams channel</li>
-<li><a href="/groovy/general_purpose/#getresources">GetResources</a> - Helper script which returns the path the resources used by this library</li>
-<li><a href="/groovy/general_purpose/#uploadtogithub">UploadToGitHub</a> - Uploads a file to a GitHub project</li>
+<li><a href="./groovy/general_purpose/#exportaslibrary">ExportASLibrary</a> - Exports a library from an Automation Studio project in binary format</li>
+<li><a href="./groovy/general_purpose/#frameworkexport">FrameworkExport</a> - Creates a zip file for importing using the mapp Framework Import tool</li>
+<li><a href="./groovy/general_purpose/#sendnotifications">SendNotifications</a> - Sends notifications to a MS Teams channel</li>
+<li><a href="./groovy/general_purpose/#getresources">GetResources</a> - Helper script which returns the path the resources used by this library</li>
+<li><a href="./groovy/general_purpose/#uploadtogithub">UploadToGitHub</a> - Uploads a file to a GitHub project</li>
 </ul>
 <h3 id="projectversion-information">Project/Version Information</h3>
 <ul>
-<li><a href="/groovy/Version/#version">Version</a> - Returns the version number in the V&lt;Major&gt;.&lt;Minor&gt;.&lt;Bugfix&gt;.&lt;Number&gt; format.  Version information is based on the latest repository tag and the branch name</li>
-<li><a href="/groovy/Version/#majorversionnumber">MajorVersionNumber</a> - Returns just the Major version number</li>
-<li><a href="/groovy/Version/#minorversionnumber">MinorVersionNumber</a> - Returns just the Minor version number</li>
-<li><a href="/groovy/Version/#bugfixversionnumber">BugFixVersionNumber</a> - Returns just the BugFix version number</li>
-<li><a href="/groovy/Version/#isreleasecandidate">IsReleaseCandidate</a> - Returns true if the branch is a release candidate branch (release/*)</li>
-<li><a href="/groovy/Version/#isreleasebranch">IsReleaseBranch</a> - Returns true if this is the main branch, false otherwise</li>
-<li><a href="/groovy/Version/#ishotfix">IsHotFix</a> - Returns true if this is a hotfix branch, false otherwise</li>
-<li><a href="/groovy/Version/#branchname">BranchName</a> - Returns the branch name from the repository</li>
+<li><a href="./groovy/Version/#version">Version</a> - Returns the version number in the V&lt;Major&gt;.&lt;Minor&gt;.&lt;Bugfix&gt;.&lt;Number&gt; format.  Version information is based on the latest repository tag and the branch name</li>
+<li><a href="./groovy/Version/#majorversionnumber">MajorVersionNumber</a> - Returns just the Major version number</li>
+<li><a href="./groovy/Version/#minorversionnumber">MinorVersionNumber</a> - Returns just the Minor version number</li>
+<li><a href="./groovy/Version/#bugfixversionnumber">BugFixVersionNumber</a> - Returns just the BugFix version number</li>
+<li><a href="./groovy/Version/#isreleasecandidate">IsReleaseCandidate</a> - Returns true if the branch is a release candidate branch (release/*)</li>
+<li><a href="./groovy/Version/#isreleasebranch">IsReleaseBranch</a> - Returns true if this is the main branch, false otherwise</li>
+<li><a href="./groovy/Version/#ishotfix">IsHotFix</a> - Returns true if this is a hotfix branch, false otherwise</li>
+<li><a href="./groovy/Version/#branchname">BranchName</a> - Returns the branch name from the repository</li>
 <li><a href="groovy/Version/#tag">Tag</a> - returns the latest tag from the repository</li>
 </ul>
 <h3 id="build-scripts">Build Scripts</h3>
 <ul>
-<li><a href="/groovy/build/#buildasproject">BuildASProject</a> - Builds an Automation Studio project configuration</li>
-<li><a href="/groovy/build/#buildhelpndoc">BuildHelpNDoc</a> - Builds a HelpNDoc project in either HTML or PDF</li>
-<li><a href="/groovy/build/#buildarsimstructure">BuildARsimStructure</a> - Builds the ARSim directory structure</li>
-<li><a href="/groovy/build/#msbuild">MSBuild</a> - Builds a Visual Studio project</li>
+<li><a href="./groovy/build/#buildasproject">BuildASProject</a> - Builds an Automation Studio project configuration</li>
+<li><a href="./groovy/build/#buildhelpndoc">BuildHelpNDoc</a> - Builds a HelpNDoc project in either HTML or PDF</li>
+<li><a href="./groovy/build/#buildarsimstructure">BuildARsimStructure</a> - Builds the ARSim directory structure</li>
+<li><a href="./groovy/build/#msbuild">MSBuild</a> - Builds a Visual Studio project</li>
 </ul>
 <h3 id="test-scripts">Test Scripts</h3>
 <ul>
-<li><a href="/groovy/test#runarunittests">RunArUnitTests</a> - Starts an ArSim instance and runs the available unit tests</li>
-<li><a href="/groovy/test#runmappviewintegrationtests">RunMappViewIntegrationTests</a> - Runs the mapp View integration tests</li>
-<li><a href="/groovy/test#processartestresults">ProcessArTestResults</a> - Converts the output of the AR unit tests into a format for Jenkins</li>
+<li><a href="./groovy/test#runarunittests">RunArUnitTests</a> - Starts an ArSim instance and runs the available unit tests</li>
+<li><a href="./groovy/test#runmappviewintegrationtests">RunMappViewIntegrationTests</a> - Runs the mapp View integration tests</li>
+<li><a href="./groovy/test#processartestresults">ProcessArTestResults</a> - Converts the output of the AR unit tests into a format for Jenkins</li>
 </ul>
 <h2 id="python-scripts">Python Scripts</h2>
 <p>Python scripts can not be called directly from your Jenkins pipeline, most of these are used internally in the Groovy</p>
@@ -522,24 +522,24 @@
 </code></pre>
 <h3 id="automation-studio-helpers">Automation Studio Helpers</h3>
 <ul>
-<li><a href="/python/automation_studio/#asproject">ASProject</a> - Loads an Automation Studio project into a python class</li>
-<li><a href="/python/automation_studio/#asprojectcompile">AsProjectCompile</a> - Builds an Automation Studio project</li>
-<li><a href="/python/automation_studio/#createarsiminstallation">CreateArSimInstallation</a> - Creates the ArSim install folder</li>
-<li><a href="/python/automation_studio/#export">Export</a> - Exports a zip file for importing with the mapp Framework Import tool</li>
-<li><a href="/python/automation_studio/#installedas">InstalledAS</a> - Returns a list of all Automation Studio installations on the computer</li>
-<li><a href="/python/automation_studio/#librarybuild">LibraryBuild</a> - Exports a binary version of a library</li>
-<li><a href="/python/automation_studio/#moduleok">ModuleOK</a> - Verifies that all module's ModuleOK input is being monitored</li>
-<li><a href="/python/automation_studio/#processcodecoverage">ProcessCodeCoverage</a> - Generates a html and xml file with the code coverage data</li>
-<li><a href="/python/automation_studio/#rununittests">RunUnitTests</a> - Runs the unit tests in ArSim</li>
-<li><a href="/python/automation_studio/startarsim">StartArSim</a> - Starts an ArSim instance and wait for it to be in run mode before returning</li>
-<li><a href="/python/automation_studio/stoparsim">StopArSim</a> - Stops an ArSim instance</li>
+<li><a href="./python/automation_studio/#asproject">ASProject</a> - Loads an Automation Studio project into a python class</li>
+<li><a href="./python/automation_studio/#asprojectcompile">AsProjectCompile</a> - Builds an Automation Studio project</li>
+<li><a href="./python/automation_studio/#createarsiminstallation">CreateArSimInstallation</a> - Creates the ArSim install folder</li>
+<li><a href="./python/automation_studio/#export">Export</a> - Exports a zip file for importing with the mapp Framework Import tool</li>
+<li><a href="./python/automation_studio/#installedas">InstalledAS</a> - Returns a list of all Automation Studio installations on the computer</li>
+<li><a href="./python/automation_studio/#librarybuild">LibraryBuild</a> - Exports a binary version of a library</li>
+<li><a href="./python/automation_studio/#moduleok">ModuleOK</a> - Verifies that all module's ModuleOK input is being monitored</li>
+<li><a href="./python/automation_studio/#processcodecoverage">ProcessCodeCoverage</a> - Generates a html and xml file with the code coverage data</li>
+<li><a href="./python/automation_studio/#rununittests">RunUnitTests</a> - Runs the unit tests in ArSim</li>
+<li><a href="./python/automation_studio/startarsim">StartArSim</a> - Starts an ArSim instance and wait for it to be in run mode before returning</li>
+<li><a href="./python/automation_studio/stoparsim">StopArSim</a> - Stops an ArSim instance</li>
 </ul>
 <h3 id="general">General</h3>
 <ul>
-<li><a href="/python/general/#dirutils">DirUtils</a> - Directory helper utility functions used by other scripts</li>
-<li><a href="/python/general/#updateinstallerversion">UpdateInstallerVersion</a> - Updates the version number in a .nsh file</li>
-<li><a href="/python/general/#updatetogithub">UploadToGitHub</a> - Uploads a file to GitHub</li>
-<li><a href="/python/general/#zip">Zip</a> - Creates a Zip archive of a directory</li>
+<li><a href="./python/general/#dirutils">DirUtils</a> - Directory helper utility functions used by other scripts</li>
+<li><a href="./python/general/#updateinstallerversion">UpdateInstallerVersion</a> - Updates the version number in a .nsh file</li>
+<li><a href="./python/general/#updatetogithub">UploadToGitHub</a> - Uploads a file to GitHub</li>
+<li><a href="./python/general/#zip">Zip</a> - Creates a Zip archive of a directory</li>
 </ul>
 
 
