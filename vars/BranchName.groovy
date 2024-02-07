@@ -4,7 +4,7 @@ def call(Map config = [:]){
         branch = "${env.BRANCH_NAME}";
     }else {
         try {
-            powershell(returnStdout: true, script: "git -C ${config.workspace} branch --show-current").trim();
+            branch = powershell(returnStdout: true, script: "git -C ${config.workspace} branch --show-current").trim();
         }catch (err){ 
 
         }
