@@ -15,13 +15,21 @@ import tempfile
 import shutil
 from os.path import basename
 from DirUtils import removeDir
-
+from InstalledAS import InstalledAS
+    
 class ModuleType(Enum):
     Unknown = 0
     DigitalInput = 1
     DigitalOutput = 2
     AnalogInput = 3
     AnalogOutput = 4
+
+class CpuArchitecture(Enum):
+    Unknown = 0
+    SG3 = 1
+    SG4_IA32 = 2
+    SG4_ARM = 3
+    SGC = 4
 
 class MappedVariable:
     def __init__(self, name, channel, type):
@@ -148,7 +156,7 @@ class ASLibrary:
 
             for c in self._configurations:
                 config = self._configurations[c]
-                tempFolder = os.path.join('C:', 'Temp', config._name) if (os.path.exists(os.path.join('C:', 'Temp',  config._name))) else os.path.join(self._projectDir, 'Temp')
+                tempFolder = config.TempDirectory()
                 if (os.path.exists(os.path.join(tempFolder, 'Includes', self.name + '.h')) == False):
                     continue
 
@@ -156,16 +164,24 @@ class ASLibrary:
                 shutil.copyfile(os.path.join(tempFolder, 'Includes', self.name + '.h'), os.path.join(exportDir, 'SGC', self.name + '.h'))
                 shutil.copyfile(os.path.join(tempFolder, 'Includes', self.name + '.h'), os.path.join(exportDir, 'SG4', self.name + '.h'))
             
-                if (os.path.isfile(os.path.join(tempFolder, 'Objects', config._name, 'ConfigurationOptions.opt')) == False):
+                if (config.cpuArchitecture() == CpuArchitecture.SG3):
+                    target = "SG4"
+                elif (config.cpuArchitecture() == CpuArchitecture.SGC):
+                    target = "SGC"
+                elif (config.cpuArchitecture() == CpuArchitecture.SG4_IA32):
+                    target = "SG4"
+                elif (config.cpuArchitecture() == CpuArchitecture.SG4_ARM):
+                    target = os.path.join("SG4", "Arm")
+                    os.mkdir(os.path.join(exportDir, 'SG4', "Arm"))
+                else:
                     continue
-                root = ET.parse(os.path.join(tempFolder, 'Objects', config._name, 'ConfigurationOptions.opt')).getroot()
-                target = root.get('Target')
+
                 shutil.copyfile(os.path.join(tempFolder, 'Archives', config._name, config._cpuName, 'lib' + self.name + '.a'), os.path.join(exportDir, target, 'lib' + self.name + '.a'))
                 shutil.copyfile(os.path.join(self._projectDir, 'Binaries', config._name, config._cpuName, self.name + '.br'), os.path.join(exportDir, target, self.name + '.br'))
 
-            if (os.path.exists(os.path.join(str(directory) + self.name, self._version))):
-                shutil.rmtree(os.path.join(str(directory) + self.name, self._version))
-            shutil.copytree(exportDir, os.path.join(str(directory) + self.name, self._version))
+            if (os.path.exists(os.path.join(str(directory), self.name, self._version))):
+                shutil.rmtree(os.path.join(str(directory), self.name, self._version))
+            shutil.copytree(exportDir, os.path.join(str(directory), self.name, self._version))
 
 class ASPackage:
     @staticmethod
@@ -215,7 +231,6 @@ class ASConfiguration:
     @staticmethod
     def Type():
         return 'Configuration'
-    
 
     @staticmethod
     def __ioType(type):
@@ -229,7 +244,7 @@ class ASConfiguration:
             return ModuleType.AnalogOutput
         return ModuleType.Unknown
 
-    def __init__(self, name, directory):
+    def __init__(self, name, directory, version):
         self._name = name
         self._modules = []
         self._directory = directory
@@ -240,6 +255,7 @@ class ASConfiguration:
         self.__ioMapFile = os.path.join(directory, self._cpuName, 'IoMap.iom')
         self.findIoModules()
         self.readIoMapp()
+        self._version = version
         #print ('added ' + name)
 
     def TempDirectory(self):
@@ -291,6 +307,29 @@ class ASConfiguration:
     def modulesNotSupervised(self) -> IoModule:
         return [m for m in self._modules if m.isModuleOkMonitored() != True]
 
+    def cpuArchitecture(self) -> CpuArchitecture:
+        root = ET.parse(os.path.join(self.TempDirectory(), 'Objects', self._name, 'ConfigurationOptions.opt')).getroot()
+        target = root.get('Target')
+        if (target == 'SG3'):
+            return CpuArchitecture.SG3
+        elif (target == 'SGC'):
+            return CpuArchitecture.SGC
+        elif (target == 'SG4'):
+            ashwd = os.path.join(self.TempDirectory(), 'Objects', self._name, self._cpuName, 'ashwd.br.tmp.xml')
+            if (not os.path.exists(ashwd)):
+                return CpuArchitecture.SG4_IA32
+            root = ET.parse(ashwd).getroot()
+            ns = {'': 'http://br-automation.com/AR/IO/HWD'}
+            name = root.find('.//Hardware/Parameter[@ID="HwcShortName"]', ns).get('Value')
+            
+            as_installation = InstalledAS.Info()[0][2]
+            ar_directory_name = self._arVersion.replace('.', '')
+            ar_directory_name = ar_directory_name[:1] + '0' + ar_directory_name[1:]
+            if os.path.exists(os.path.join(as_installation, 'System', ar_directory_name, 'SG4', 'ARM', f'@cf{name}.br')):
+                return CpuArchitecture.SG4_ARM
+            return CpuArchitecture.SG4_IA32
+        return CpuArchitecture.Unknown
+
 class ASProject:
     @staticmethod
     def __projectName(projectDir):
@@ -320,7 +359,7 @@ class ASProject:
         self.projectName = ASProject.__projectName(projectDir)
         self._configurations = {}
         objects = ET.parse(os.path.join(projectDir, 'Physical', 'Physical.pkg')).getroot().find(ASConfiguration.Namespace() + 'Objects')
-        [self.addConfiguration(ASConfiguration(o.text, os.path.join(projectDir, 'Physical', o.text))) for o in objects.findall(ASConfiguration.Namespace() + 'Object') if ((os.path.isdir(os.path.join(projectDir, 'Physical', o.text))) and (o.get('Type') == ASConfiguration.Type()))]
+        [self.addConfiguration(ASConfiguration(o.text, os.path.join(projectDir, 'Physical', o.text), self.version)) for o in objects.findall(ASConfiguration.Namespace() + 'Object') if ((os.path.isdir(os.path.join(projectDir, 'Physical', o.text))) and (o.get('Type') == ASConfiguration.Type()))]
 
         self._packages = []
         objects = ET.parse(os.path.join(projectDir, 'Logical', 'Package.pkg')).getroot().find(ASPackage.Namespace() + 'Objects')
