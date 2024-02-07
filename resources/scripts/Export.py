@@ -1,4 +1,3 @@
-
 import argparse
 import json
 import os
@@ -10,8 +9,8 @@ import tempfile
 import shutil
 from pathlib import Path
 import glob
+import ASProject as ASProject
 from DirUtils import removeDir, CreateDirectory, CleanDirectory
-import ASProject
 import xml.etree.ElementTree as ET
 
 projectPath = ''
@@ -44,7 +43,7 @@ def cleanPackageFile(dir, file, compileLibraries):
 def copySwDeployment(dir, tasks, libraries):
     global projectPath
     global physicalDir
-    
+    print(projectPath)
     cpuDir = [cpu for cpu in os.listdir(os.path.join(projectPath, physicalDir)) if os.path.isdir(os.path.join(os.path.join(projectPath, physicalDir), cpu))][0]
     file = os.path.join(physicalDir, cpuDir, 'Cpu.sw')
     if (path.exists(os.path.join(dir, physicalDir, cpuDir)) == False):
@@ -71,13 +70,14 @@ def copyFileDevices(dir, fileDevices):
         copy(dir, os.path.join(physicalDir, 'Hardware.hw'))
     fileDeviceIndex = -1
     fileDeviceLines = []
+    fileDevice = ''
     with open(os.path.join(dir, file), "r+") as f:
         new_f = f.readlines()
         f.seek(0)
         for line in new_f:
             if (fileDeviceIndex == -1):
                 fileDeviceIndex = line.find('<Group ID="FileDevice')
-            elif ((line.find('Group ID="') != -1) or (line.find('ID="FileDevice') == -1)):
+            elif ((line.find('Group ID="') != -1) or (line.find('ID="FileDevice') == -1) and (fileDevice != '')):
                 if (fileDevice in fileDevices):
                     for l in fileDeviceLines:
                         f.write(l)
@@ -87,7 +87,8 @@ def copyFileDevices(dir, fileDevices):
                 fileDeviceLines.append(line)
                 if ((line.find('FileDeviceName') != -1) and (line.find('Value="') != -1)):
                     fileDevice = line[line.find('Value="') + 7 : line.find('"', line.find('Value="') + 7)]
-            if ((fileDeviceIndex == -1) and ((line.find('<?') != -1) or (line.find('Hardware') != -1) or (line.find('Module') != -1))):
+            if ((fileDeviceIndex == -1) and ((line.find('<?') != -1) or (line.find('Hardware') != -1) or (line.find('<Module ') != -1) or (line.find('</Module') != -1))):
+                #print('adding line ' + line)
                 f.write(line)
         f.truncate()
 
@@ -103,7 +104,7 @@ def copyVncDevices(dir):
     connectorIndex = -1
     connector = ''
     connectorLines = []
-    with open(os.path.join(projectPath, physicalDir + 'VC4', 'Hardware.hw'), "r") as f:
+    with open(os.path.join(projectPath, physicalDir, 'Hardware.hw'), "r") as f:
         orig_f = f.readlines()
         f.seek(0)
         for line in orig_f:
@@ -136,21 +137,40 @@ def copyVncDevices(dir):
 def enableOpcUa(dir):
     global physicalDir
     #print('enabling Opcua')
-    file = os.path.join(physicalDir, 'Hardware.hw')
-    if (os.path.isfile(os.path.join(dir, file)) == False):
+    
+    if (os.path.isfile(os.path.join(dir, physicalDir, 'Config.pkg')) == False):
+        copy(dir, os.path.join(physicalDir, 'Config.pkg'))
+    config = ET.parse(os.path.join(dir, physicalDir, 'Config.pkg'))
+    ET.register_namespace('', 'http://br-automation.co.at/AS/Configuration')
+    ns = '{http://br-automation.co.at/AS/Configuration}'
+    cpu = ''
+    for obj in config.getroot().find(ns + 'Objects').findall(ns + 'Object'):
+        if (obj.get('Type') == 'Cpu'):
+            cpu = obj.text
+            break
+    
+    if (os.path.isfile(os.path.join(dir, physicalDir, cpu, 'Cpu.pkg')) == False):
+        copy(dir, os.path.join(physicalDir, cpu, 'Cpu.pkg'))
+    package = ET.parse(os.path.join(dir, physicalDir, cpu, 'Cpu.pkg'))
+    ns = '{http://br-automation.co.at/AS/Cpu}'
+    cpu_module = package.getroot().find(ns + 'Configuration').get('ModuleId')
+
+    if (os.path.isfile(os.path.join(dir, physicalDir, 'Hardware.hw')) == False):
         copy(dir, os.path.join(physicalDir, 'Hardware.hw'))
-    file = os.path.join(dir, physicalDir, 'Hardware.hw')
-    with open(os.path.join(dir, file), "r+") as f:
-        new_f = f.readlines()
-        f.seek(0)
-        for line in new_f:
-            #print(line)
-            if (line.find('</Module>') != -1):
-                f.write('    <Parameter ID="ActivateOpcUa" Value="1" />\n')
-                f.write('    <Parameter ID="OpcUaActivateAuditEvents" Value="1" />\n')
-                f.write('    <Parameter ID="OpcUa_Security_AdminRole" Value="Administrators" />\n')
-            f.write(line)
-        f.truncate()
+    ns = '{http://br-automation.co.at/AS/Hardware}'
+    ET.register_namespace('', 'http://br-automation.co.at/AS/Hardware')
+    hardware = ET.parse(os.path.join(dir, physicalDir, 'Hardware.hw'))
+    
+    for module in hardware.getroot().findall(ns + 'Module'):
+        if module.get('Type') == cpu_module:
+            if not module.findall(ns + 'Parameter/[@ID="ActivateOpcUa"]'):
+                module.append(ET.Element(ns + 'Parameter', ID='ActivateOpcUa', Value='1'))
+            if not module.findall(ns + 'Parameter/[@ID="OpcUaActivateAuditEvents"]'):
+                module.append(ET.Element(ns + 'Parameter', ID='OpcUaActivateAuditEvents', Value='1'))        
+            if not module.findall(ns + 'Parameter/[@ID="OpcUa_Security_AdminRole"]'):
+                module.append(ET.Element(ns + 'Parameter', ID='OpcUa_Security_AdminRole', Value='Administrators'))
+            break
+    hardware.write(os.path.join(dir, physicalDir, 'Hardware.hw'), xml_declaration=True, encoding='utf-8')
 
 def setUserPartitionSize(dir):
     global projectPath
@@ -205,7 +225,7 @@ def cleanPackage(exportName, exportDir, compileLibraries):
                 shutil.copy(os.path.join(projectPath, relativePath, Path(projectPackageFile[0]).name), os.path.join(exportDir, relativePath, Path(projectPackageFile[0]).name))
                 cleanPackageFile(os.path.join(exportDir, relativePath), Path(projectPackageFile[0]).name, compileLibraries)
 
-def standardExport(export, exportDir, project, libraries = []):
+def standardExport(export, exportDir, project, tasks, libraries = []):
     if ('libraries' in export):
         libraries += export['libraries']
         for l in export['libraries']:
@@ -227,6 +247,7 @@ def standardExport(export, exportDir, project, libraries = []):
                 shutil.copytree(versionDir, os.path.join(exportDir, libDir))
                 removeDir(os.path.join(exportDir, l))
     if ('physical' in export):
+        copySwDeployment(exportDir, tasks, libraries)
         copyFileDevices(exportDir, export['physical']["fileDevices"])
         if (('enableOpcUa' in export['physical']) and (export['physical']['enableOpcUa'] == True)):
             enableOpcUa(exportDir)
@@ -262,7 +283,8 @@ def main() -> None:
         return 0
     export = json.load(open(config))
     
-    standardExport(export, exportDir, project)
+    if ('physical' in export):
+        standardExport(export, exportDir, project, export['physical']["deployTasks"])
     fileExport(export, exportDir)
     compileLibraries = export['compileLibraries'] if ('compileLibraries' in export) else []
 
@@ -292,17 +314,18 @@ def main() -> None:
             shutil.copytree(exportDir, os.path.join(args.output, Path(args.config).stem + 'MappView'))
 
     if ('VC4' in export) == True:
+        physicalDir = args.physical + 'VC4'
         CleanDirectory(exportDir)
         libraries = []
         for f in export['VC4']:
             copy(exportDir, f)    
             if ('Libraries' in f):
                 libraries.append(f[f.index('Libraries\\') + 10:])
-        standardExport(export, exportDir, project)
+        standardExport(export, exportDir, project, export['physical']["deployTasksVC4"])
         compileLibraries = export['compileLibraries'] if ('compileLibraries' in export) else []
-        copySwDeployment(exportDir, export['physical']["deployTasksVC4"], libraries)
-        copyFileDevices(exportDir, export['physical']["fileDevices"])
         copyVncDevices(exportDir)
+        if (('enableOpcUaVC4' in export['physical']) and (export['physical']['enableOpcUaVC4'] == True)):
+            enableOpcUa(exportDir)
 
         cleanPackage(os.path.join(args.output, Path(args.config).stem + 'VC4'), exportDir, compileLibraries)
         if (args.zip == True):
@@ -312,4 +335,3 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
-
