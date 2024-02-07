@@ -32,7 +32,7 @@ def PrintErrorsAndWarnings(output):
             elif (matches.group('result')) == 'warning':
                 print(f'\033[92m {l} \033[0m')
 
-def Compile(Project, Configuration, BuildPIP):
+def Compile(Project, Configuration, BuildPIP, NoClean):
     __projectPath = Project._projectDir
     __compileAsPath = InstalledAS.ASInstallPath(Project)
     __PVIpath = InstalledAS.PVIPath()
@@ -44,13 +44,14 @@ def Compile(Project, Configuration, BuildPIP):
     regex = re.compile(r'Build: (\d+) error\(s\), (\d+) warning\(s\)')
     for config in Project._configurations:
         if (Configuration == Project._configurations[config]._name) or (Configuration == 'all'):
-            cleanCommand = (__compileAsPath + r'\Bin-en\BR.AS.Build.exe'
-                                + ' "' + __projectPath + '\\' + Project.projectName + '"'
-                                + ' -cleanAll'
-                                + ' -t ' + Project._configurations[config].TempDirectory()
-                                )
-            print(cleanCommand)
-            result = subprocess.run(cleanCommand, cwd=__projectPath, capture_output=True, text=True)
+            if (NoClean == False):
+                cleanCommand = (__compileAsPath + r'\Bin-en\BR.AS.Build.exe'
+                                    + ' "' + __projectPath + '\\' + Project.projectName + '"'
+                                    + ' -cleanAll'
+                                    + ' -t ' + Project._configurations[config].TempDirectory()
+                                    )
+                print(cleanCommand)
+                result = subprocess.run(cleanCommand, cwd=__projectPath, capture_output=True, text=True)
 
             buildCommand = (__compileAsPath + r'\Bin-en\BR.AS.Build.exe'
                                 + ' "' + __projectPath + '\\' + Project.projectName + '"'
@@ -101,10 +102,11 @@ def main() -> None:
     parser.add_argument('-c', '--configuration', help='Configuration to build', dest='config', required=False, default='all')
     parser.add_argument('-w', '--maxwarnings', help='Maximum allowed warnings during build, -1 disables', dest='maxWarnings', required=False, default=-1)
     parser.add_argument('-b', '--buildpip', help='Builds the Project Installation Package', dest='BuildPIP', required=False, default=False, type=parse_bool)
+    parser.add_argument('-n', '--no-clean', help='Do not clean the project before building', dest='NoClean', action='store_true')
     args = parser.parse_args()
 
     project = ASProject.ASProject(args.projectDir)
-    results = Compile(project, args.config, args.BuildPIP)
+    results = Compile(project, args.config, args.BuildPIP, args.NoClean)
     compileResult = 0
     maxWarnings = 0
     for result in results:
