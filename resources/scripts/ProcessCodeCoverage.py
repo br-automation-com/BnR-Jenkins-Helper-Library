@@ -30,9 +30,8 @@ def main():
     chdir(output)
     convertGcovFiles(project, args.config)
     
-    system(fr'py -m gcovr -g -k -v --root "{args.projectDir}" --html --html-details -o report.html')
-    system(fr'py -m gcovr -g -k -v --root "{args.projectDir}" --xml-pretty -o report.xml')
-
+    system(f'py -m gcovr -g -k --root "{args.projectDir}" --html --html-details -o report.html')
+    system(f'py -m gcovr -g -k --root "{args.projectDir}" --xml-pretty -o report.xml')
 
 if __name__ == '__main__':
     main()
