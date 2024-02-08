@@ -68,10 +68,20 @@ function GenerateJWT(){
     $currentTime = [int][double]::parse((Get-Date -Date $((Get-Date).ToUniversalTime()) -UFormat %s))
     $expireTime = $currentTime + 300; # token is valid for 5 minutes 
     $currentTime = $currentTime - 10; # account for time drift between servers
-
-    #github-id and github-cer need to be specified in the Jenkins environment variables on your installation
-    $id = [System.Environment]::GetEnvironmentVariable('github-id')
-    $cert = [System.Environment]::GetEnvironmentVariable('github-cer')
+    
+    if ($user -eq 'br-na-com'){
+        $id = [System.Environment]::GetEnvironmentVariable('github-br-na-pm-id')
+        $cert = [System.Environment]::GetEnvironmentVariable('github-br-na-pm-cert')
+    }
+    elseif ($user -eq 'br-automation-com'){
+        $id = [System.Environment]::GetEnvironmentVariable('github-br-automation-com-id')
+        $cert = [System.Environment]::GetEnvironmentVariable('github-br-automation-com-cert')
+    }
+    else {
+        #github-id and github-cer need to be specified in the Jenkins environment variables on your installation
+        $id = [System.Environment]::GetEnvironmentVariable('github-id')
+        $cert = [System.Environment]::GetEnvironmentVariable('github-cer')
+    }
 
     [hashtable]$header = @{alg = "RS256"; typ = "JWT"}
 
