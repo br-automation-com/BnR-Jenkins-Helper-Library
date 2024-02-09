@@ -316,13 +316,43 @@
 
 <h1 id="general-purpose">General Purpose</h1>
 <h2 id="exportaslibrary">ExportASLibrary</h2>
-<p>Exports a library from an Automation Studio project in binary format</p>
-<p><code>ExportASLibrary()</code></p>
+<p>Exports a library from an Automation Studio project in binary format.
+The library must already be compiled before the export is called.</p>
+<p><strong>Usage:</strong>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">ExportASLibrary</span><span class="o">(</span><span class="nl">project:</span><span class="w"> </span><span class="s2">&quot;$PROJECT_DIR&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">library:</span><span class="w"> </span><span class="s2">&quot;MyLib&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">directory:</span><span class="w"> </span><span class="s2">&quot;Export&quot;</span><span class="o">)</span>
+</span></code></pre></div>
+<strong>Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>project</td>
+<td>Full path to the directory containing the Automation Studio Project</td>
+<td>None</td>
+</tr>
+<tr>
+<td>library</td>
+<td>Name of the source code library</td>
+<td>None</td>
+</tr>
+<tr>
+<td>directory</td>
+<td>Relative path to the directory to export the library to</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
 <h2 id="frameworkexport">FrameworkExport</h2>
 <p>Creates a zip file for importing using the mapp Framework Import tool</p>
-<p><strong>Usage:</strong></p>
-<pre><code>FrameworkExport(project: &quot;$PROJECT_DIR&quot;, config: &quot;Documentation.json&quot;, output: &quot;Framework\\Services&quot;, physical: &quot;Physical\\Simulation&quot;);
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">FrameworkExport</span><span class="o">(</span><span class="nl">project:</span><span class="w"> </span><span class="s2">&quot;$PROJECT_DIR&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">config:</span><span class="w"> </span><span class="s2">&quot;Documentation.json&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">output:</span><span class="w"> </span><span class="s2">&quot;Framework\\Services&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">physical:</span><span class="w"> </span><span class="s2">&quot;Physical\\Simulation&quot;</span><span class="o">);</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -357,9 +387,9 @@
 </table>
 <h2 id="sendnotifications">SendNotifications</h2>
 <p>Sends notifications to a MS Teams channel
-<strong>Usage:</strong></p>
-<pre><code>SendNotifications(recipients: &quot;${EMAIL_LIST}&quot;, buildStatus: currentBuild.result);
-</code></pre>
+<strong>Usage:</strong>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">SendNotifications</span><span class="o">(</span><span class="nl">recipients:</span><span class="w"> </span><span class="s2">&quot;${EMAIL_LIST}&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">buildStatus:</span><span class="w"> </span><span class="n">currentBuild</span><span class="o">.</span><span class="na">result</span><span class="o">);</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -384,14 +414,14 @@
 </table>
 <h2 id="getresources">GetResources</h2>
 <p>Helper script which returns the path the resources used by this library
-<strong>Usage:</strong></p>
-<pre><code>GetResources();
-</code></pre>
+<strong>Usage:</strong>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">GetResources</span><span class="o">();</span>
+</span></code></pre></div></p>
 <h2 id="uploadtogithub">UploadToGitHub</h2>
 <p>Uploads a file to a GitHub project</p>
-<p><strong>Usage:</strong></p>
-<pre><code>UploadToGitHub(version: &quot;${RELEASE_VERSION}&quot;, organization: &quot;${REPO_ORGANIZATION}&quot;, name: &quot;${REPO_NAME}&quot;, file: &quot;${WORKSPACE}\\${fileNameArSim}&quot;);
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-groovy highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">UploadToGitHub</span><span class="o">(</span><span class="nl">version:</span><span class="w"> </span><span class="s2">&quot;${RELEASE_VERSION}&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">organization:</span><span class="w"> </span><span class="s2">&quot;${REPO_ORGANIZATION}&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">name:</span><span class="w"> </span><span class="s2">&quot;${REPO_NAME}&quot;</span><span class="o">,</span><span class="w"> </span><span class="nl">file:</span><span class="w"> </span><span class="s2">&quot;${WORKSPACE}\\${fileNameArSim}&quot;</span><span class="o">);</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -470,7 +500,7 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>

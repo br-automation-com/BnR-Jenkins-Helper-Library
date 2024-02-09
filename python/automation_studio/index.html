@@ -300,9 +300,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#librarybuild" class="md-nav__link">
+  <a href="#libraryexport" class="md-nav__link">
     <span class="md-ellipsis">
-      LibraryBuild
+      LibraryExport
     </span>
   </a>
   
@@ -371,9 +371,9 @@
 <h1 id="build">Build</h1>
 <h2 id="asproject">ASProject</h2>
 <p>Loads an Automation Studio project into a python class</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-python">    project = ASProject(r'C:\project\TestProject')
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-py highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>    <span class="n">project</span> <span class="o">=</span> <span class="n">ASProject</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;C:\project\TestProject&#39;</span><span class="p">)</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -395,9 +395,9 @@
 </table>
 <h2 id="asprojectcompile">AsProjectCompile</h2>
 <p>Builds an Automation Studio project</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-console">    C:\&gt;python AsProjectCompile.py --project C:\project\TestProject --configuration arsim
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="go">    python AsProjectCompile.py --project C:\project\TestProject --configuration arsim</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -428,13 +428,18 @@
 <td>Whether to build the <strong>P</strong>roject <strong>I</strong>nstation <strong>P</strong>ackage</td>
 <td>False</td>
 </tr>
+<tr>
+<td>--no-clean,<br>-n</td>
+<td>Whether to clean the project before building</td>
+<td>False</td>
+</tr>
 </tbody>
 </table>
 <h2 id="createarsiminstallation">CreateArSimInstallation</h2>
 <p>Creates the ArSim install folder</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-console">    C:\&gt;python CreateArSimInstallation.py --project C:\project\TestProject --configuration arsim --simulationDirectory C:\ArSim
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="go">    python CreateArSimInstallation.py --project C:\project\TestProject --configuration arsim --simulationDirectory C:\ArSim</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -464,9 +469,9 @@
 </table>
 <h2 id="export">Export</h2>
 <p>Exports a zip file for importing with the mapp Framework Import tool</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-console">    C:\&gt;python Export.py --project C:\project\TestProject --configuration Test.json --physical Physical\Simulation --output Installer
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="go">    python Export.py --project C:\project\TestProject --configuration Test.json --physical Physical\Simulation --output Installer</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -506,15 +511,15 @@
 </table>
 <h2 id="installedas">InstalledAS</h2>
 <p>Returns information on Installed Automation Studio versions</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-python">    project = ASProject(r'C:\projects\Test')
-    asPath = InstalledAS.ASInstallPath(project)
-</code></pre>
-<h2 id="librarybuild">LibraryBuild</h2>
+<p><strong>Usage:</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>    <span class="n">project</span> <span class="o">=</span> <span class="n">ASProject</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;C:\projects\Test&#39;</span><span class="p">)</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="n">asPath</span> <span class="o">=</span> <span class="n">InstalledAS</span><span class="o">.</span><span class="n">ASInstallPath</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
+</span></code></pre></div></p>
+<h2 id="libraryexport">LibraryExport</h2>
 <p>Exports a binary version of a library</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-console">    C:\&gt;python LibraryBuild.py --project C:\project\TestProject --configuration arsim --library MyLib
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="go">    python LibraryExport.py --project C:\project\TestProject --library MyLib</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -531,11 +536,6 @@
 <td>None</td>
 </tr>
 <tr>
-<td>--config,<br>-c</td>
-<td>Name of the configuration to build</td>
-<td>None</td>
-</tr>
-<tr>
 <td>--library,<br>-l</td>
 <td>Name of the library to build</td>
 <td>None</td>
@@ -543,15 +543,15 @@
 <tr>
 <td>--directory,<br>-d</td>
 <td>Directory to store the compiled library</td>
-<td>None</td>
+<td>.\</td>
 </tr>
 </tbody>
 </table>
 <h2 id="moduleok">ModuleOk</h2>
 <p>Verifies that all module's ModuleOK input is being monitored</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-console">    C:\&gt;python ModuleOk.py --project C:\project\TestProject --configuration arsim
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="go">    python ModuleOk.py --project C:\project\TestProject --configuration arsim</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -581,9 +581,9 @@
 </table>
 <h2 id="processcodecoverage">ProcessCodeCoverage</h2>
 <p>Generates a html and xml file with the code coverage data</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-console">    C:\&gt;python ProcessCodeCoverage.py --project C:\project\TestProject --configuration arsim
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="go">    python ProcessCodeCoverage.py --project C:\project\TestProject --configuration arsim</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -613,9 +613,9 @@
 </table>
 <h2 id="rununittests">RunUnitTests</h2>
 <p>Runs the unit tests in ArSim</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-console">    C:\&gt;python RunUnitTests.py --test all
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="go">    python RunUnitTests.py --test all</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -645,9 +645,9 @@
 </table>
 <h2 id="startarsim">StartArSim</h2>
 <p>Starts an ArSim instance and wait for it to be in run mode before returning</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-console">    C:\&gt;python StartArSim.py --simulationDirectory C:\ArSim
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="go">    python StartArSim.py --simulationDirectory C:\ArSim</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -667,9 +667,9 @@
 </table>
 <h2 id="stoparsim">StopArSim</h2>
 <p>Stops an ArSim instance</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-console">    C:\&gt;python StopArSim.py --simulationDirectory C:\ArSim
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="go">    python StopArSim.py --simulationDirectory C:\ArSim</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -733,7 +733,7 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>

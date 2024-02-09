@@ -505,7 +505,6 @@
 <h3 id="build-scripts">Build Scripts</h3>
 <ul>
 <li><a href="./groovy/build/#buildasproject">BuildASProject</a> - Builds an Automation Studio project configuration</li>
-<li><a href="./groovy/build/#buildhelpndoc">BuildHelpNDoc</a> - Builds a HelpNDoc project in either HTML or PDF</li>
 <li><a href="./groovy/build/#buildarsimstructure">BuildARsimStructure</a> - Builds the ARSim directory structure</li>
 <li><a href="./groovy/build/#msbuild">MSBuild</a> - Builds a Visual Studio project</li>
 </ul>
@@ -518,8 +517,8 @@
 <h2 id="python-scripts">Python Scripts</h2>
 <p>Python scripts can not be called directly from your Jenkins pipeline, most of these are used internally in the Groovy</p>
 <p>For others you can call them from a Jenkins pipeline using the following syntax</p>
-<pre><code>powershell(script: &quot;python '${GetResources()}/scripts/Export.py' --arg1 'argument'&quot;);)
-</code></pre>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>powershell(script: &quot;python &#39;${GetResources()}/scripts/Export.py&#39; --arg1 &#39;argument&#39;&quot;);)
+</span></code></pre></div>
 <h3 id="automation-studio-helpers">Automation Studio Helpers</h3>
 <ul>
 <li><a href="./python/automation_studio/#asproject">ASProject</a> - Loads an Automation Studio project into a python class</li>
@@ -527,7 +526,7 @@
 <li><a href="./python/automation_studio/#createarsiminstallation">CreateArSimInstallation</a> - Creates the ArSim install folder</li>
 <li><a href="./python/automation_studio/#export">Export</a> - Exports a zip file for importing with the mapp Framework Import tool</li>
 <li><a href="./python/automation_studio/#installedas">InstalledAS</a> - Returns a list of all Automation Studio installations on the computer</li>
-<li><a href="./python/automation_studio/#librarybuild">LibraryBuild</a> - Exports a binary version of a library</li>
+<li><a href="./python/automation_studio/#libraryexport">LibraryExport</a> - Exports a binary version of a library</li>
 <li><a href="./python/automation_studio/#moduleok">ModuleOK</a> - Verifies that all module's ModuleOK input is being monitored</li>
 <li><a href="./python/automation_studio/#processcodecoverage">ProcessCodeCoverage</a> - Generates a html and xml file with the code coverage data</li>
 <li><a href="./python/automation_studio/#rununittests">RunUnitTests</a> - Runs the unit tests in ArSim</li>
@@ -537,7 +536,6 @@
 <h3 id="general">General</h3>
 <ul>
 <li><a href="./python/general/#dirutils">DirUtils</a> - Directory helper utility functions used by other scripts</li>
-<li><a href="./python/general/#updateinstallerversion">UpdateInstallerVersion</a> - Updates the version number in a .nsh file</li>
 <li><a href="./python/general/#updatetogithub">UploadToGitHub</a> - Uploads a file to GitHub</li>
 <li><a href="./python/general/#zip">Zip</a> - Creates a Zip archive of a directory</li>
 </ul>
@@ -587,7 +585,7 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections"], "search": "assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "content.code.copy"], "search": "assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="assets/javascripts/bundle.d7c377c4.min.js"></script>

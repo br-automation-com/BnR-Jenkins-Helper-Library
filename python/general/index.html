@@ -306,15 +306,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#updateinstallerversion" class="md-nav__link">
-    <span class="md-ellipsis">
-      UpdateInstallerVersion
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#uploadtogithub" class="md-nav__link">
     <span class="md-ellipsis">
       UploadToGitHub
@@ -352,9 +343,9 @@
 <p>Directory helper utility functions used by other scripts</p>
 <h3 id="removedir">removeDir</h3>
 <p>Deletes the directory and all content in it</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-python">    removeDir(rf'C:\ArSim')
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>    <span class="n">removeDir</span><span class="p">(</span><span class="sa">rf</span><span class="s1">&#39;C:\ArSim&#39;</span><span class="p">)</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -374,9 +365,9 @@
 </table>
 <h3 id="cleandirectory">CleanDirectory</h3>
 <p>Deletes all content in the directory but does not delete the directory itself</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-python">    CleanDirectory(r'C:\ArSim')
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>    <span class="n">CleanDirectory</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;C:\ArSim&#39;</span><span class="p">)</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -396,9 +387,9 @@
 </table>
 <h3 id="createdirectory">CreateDirectory</h3>
 <p>Creates a directory if it does not already exist</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-python">    CreateDirectory(r'C:\ArSim')
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>    <span class="n">CreateDirectory</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;C:\ArSim&#39;</span><span class="p">)</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -418,9 +409,9 @@
 </table>
 <h3 id="zipdirectory">ZipDirectory</h3>
 <p>Creates a Zip archive with the contents of the directory</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-python">    ZipDirectory(r'C:\ArSim', r'C:\ArSim')
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>    <span class="n">ZipDirectory</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;C:\ArSim&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;C:\ArSim&#39;</span><span class="p">)</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -443,43 +434,11 @@
 </tr>
 </tbody>
 </table>
-<h2 id="updateinstallerversion">UpdateInstallerVersion</h2>
-<p>Updates the version number in a .nsh file</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-console">    C:\&gt;python UpdateInstallerVersion.py --project C:\projects\Test --name Test --version V1.0.0.000
-</code></pre>
-<p><strong>Options:</strong></p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>--project,<br>-p</td>
-<td>Path to the NSH project</td>
-<td>None</td>
-</tr>
-<tr>
-<td>--name,<br>-n</td>
-<td>Name of the NSH project file</td>
-<td>None</td>
-</tr>
-<tr>
-<td>--version,<br>-v</td>
-<td>Version number to update</td>
-<td>V0.0.9.000</td>
-</tr>
-</tbody>
-</table>
 <h2 id="uploadtogithub">UploadToGitHub</h2>
 <p>Uploads a file to GitHub</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-console">    C:\&gt;UploadToGitHub.ps1 V1.0.0 br-automation-com mappFramework 'C:\ArSim.zip'
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="go">    C:\&gt;UploadToGitHub.ps1 V1.0.0 br-automation-com mappFramework &#39;C:\ArSim.zip&#39;</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -509,9 +468,9 @@
 </table>
 <h2 id="zip">Zip</h2>
 <p>Creates a Zip archive of a directory</p>
-<p><strong>Usage:</strong></p>
-<pre><code class="language-console">    C:\&gt;python Zip.py --folder 'C:\ArSim'
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="go">    C:\&gt;python Zip.py --folder &#39;C:\ArSim&#39;</span>
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -575,7 +534,7 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>

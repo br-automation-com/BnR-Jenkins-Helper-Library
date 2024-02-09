@@ -264,15 +264,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#buildhelpndoc" class="md-nav__link">
-    <span class="md-ellipsis">
-      BuildHelpNDoc
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#buildarsimstructure" class="md-nav__link">
     <span class="md-ellipsis">
       BuildARsimStructure
@@ -308,9 +299,9 @@
 <h1 id="build">Build</h1>
 <h2 id="buildasproject">BuildASProject</h2>
 <p>Builds an Automation Studio project configuration</p>
-<p><strong>Usage:</strong></p>
-<pre><code>BuildASProject(project: &quot;${PROJECT_DIR}&quot;, configuration: &quot;${CONFIG_NAME}&quot;, max_warnings: -1, buildpip: true);
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>BuildASProject(project: &quot;${PROJECT_DIR}&quot;, configuration: &quot;${CONFIG_NAME}&quot;, max_warnings: -1, buildpip: true);
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -343,49 +334,11 @@
 </tr>
 </tbody>
 </table>
-<h2 id="buildhelpndoc">BuildHelpNDoc</h2>
-<p>Builds a HelpNDoc project in either HTML or PDF</p>
-<p><strong>Usage:</strong></p>
-<pre><code>BuildHelpNDoc(file: &quot;$WORKSPACE\\Documentation.hnd&quot;, template: &quot;${WORKSPACE}\\Documentation\\Templates&quot;, type: &quot;PDF&quot;, output: &quot;${PROJECT_DIR}\\Logical\\Documentation.pdf&quot;);
-
-</code></pre>
-<p><strong>Options:</strong></p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>file</td>
-<td>Full path to the HelpNDoc file</td>
-<td>None</td>
-</tr>
-<tr>
-<td>template</td>
-<td>Full path to the HelpNDoc template</td>
-<td>None</td>
-</tr>
-<tr>
-<td>type</td>
-<td>PDF or HTML</td>
-<td>None</td>
-</tr>
-<tr>
-<td>output</td>
-<td>Full path to where the documentation will be generated</td>
-<td>None</td>
-</tr>
-</tbody>
-</table>
 <h2 id="buildarsimstructure">BuildARsimStructure</h2>
 <p>Builds the ARSim directory structure</p>
-<p><strong>Usage:</strong></p>
-<pre><code>BuildARsimStructure(project: &quot;${PROJECT_DIR}&quot;, configuration: &quot;${CONFIG_NAME}&quot;);
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>BuildARsimStructure(project: &quot;${PROJECT_DIR}&quot;, configuration: &quot;${CONFIG_NAME}&quot;);
+</span></code></pre></div></p>
 <p><strong>Options:</strong></p>
 <table>
 <thead>
@@ -410,9 +363,9 @@
 </table>
 <h2 id="msbuild">MSBuild</h2>
 <p>Returns the path of the MS build tool</p>
-<p><strong>Usage:</strong></p>
-<pre><code>MSBuild_Path = MSBuild();
-</code></pre>
+<p><strong>Usage:</strong>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>MSBuild_Path = MSBuild();
+</span></code></pre></div></p>
 
 
 
@@ -459,7 +412,7 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
