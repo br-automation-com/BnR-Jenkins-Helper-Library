@@ -951,6 +951,30 @@ def project(tmp_path):
 </Project>"''')
     yield project
 
+
+@pytest.fixture
+def project_sp(tmp_path):
+    project = tmp_path
+    project_file = project / "test.apj"
+    project_file.write_text('''<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio Version="4.12.4.107 SP" WorkingVersion="4.12"?>
+<Project Version="1.00.0" Edition="Standard" EditionComment="Standard" xmlns="http://br-automation.co.at/AS/Project">
+  <Communication />
+  <ANSIC DefaultIncludes="true" />
+  <IEC ExtendedConstants="true" IecExtendedComments="true" KeywordsAsStructureMembers="false" NamingConventions="true" Pointers="true" Preprocessor="true" />
+  <Motion RestartAcoposParameter="true" RestartInitParameter="true" />
+  <Project StoreRuntimeInProject="false" />
+  <Variables DefaultInitValue="0" DefaultRetain="false" DefaultVolatile="true" />
+  <TechnologyPackages>
+    <mapp Version="5.24.1" />
+    <mappCockpit Version="5.24.1" />
+    <mappControl Version="5.24.1" />
+    <mappMotion McAcpDrv="5.26.9" McAcpSim="5.26.9" McAcpSys="5.26.9" McDriveLog="5.26.9" McMechSys="5.26.9" Version="5.26.7010" />
+    <mappView Version="5.24.1" />
+  </TechnologyPackages>
+</Project>''')
+    yield project
+
 @pytest.fixture
 def export(tmp_path):
     export = tmp_path / 'export'

@@ -342,7 +342,7 @@ class ASProject:
         for file in os.listdir(projectDir):
             if file.endswith('.apj'):
                 apj = open(os.path.join(projectDir, file)).read()
-                return str(re.findall(r'<?AutomationStudio Version="([\d\.]*)"', apj)[0])
+                return str(re.findall(r'<?AutomationStudio Version="([\d\.]*)', apj)[0])
 
     @staticmethod
     def _workingVersion(projectDir):

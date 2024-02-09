@@ -11,6 +11,10 @@ def test_ASVersion(project):
     version = ASProject.ASProject._version(project)
     assert '4.12.2.93' == version
 
+def test_ASVersion_sp(project_sp):
+    version = ASProject.ASProject._version(project_sp)
+    assert '4.12.4.107' == version
+
 def test_ASWorkingVersion(project):
     version = ASProject.ASProject._workingVersion(project)
     assert '4.12' == version
