@@ -165,7 +165,7 @@ class ASLibrary:
                 shutil.copyfile(os.path.join(tempFolder, 'Includes', self.name + '.h'), os.path.join(exportDir, 'SG4', self.name + '.h'))
             
                 if (config.cpuArchitecture() == CpuArchitecture.SG3):
-                    target = "SG4"
+                    target = "SG3"
                 elif (config.cpuArchitecture() == CpuArchitecture.SGC):
                     target = "SGC"
                 elif (config.cpuArchitecture() == CpuArchitecture.SG4_IA32):
@@ -175,9 +175,11 @@ class ASLibrary:
                     os.mkdir(os.path.join(exportDir, 'SG4', "Arm"))
                 else:
                     continue
-
-                shutil.copyfile(os.path.join(tempFolder, 'Archives', config._name, config._cpuName, 'lib' + self.name + '.a'), os.path.join(exportDir, target, 'lib' + self.name + '.a'))
-                shutil.copyfile(os.path.join(self._projectDir, 'Binaries', config._name, config._cpuName, self.name + '.br'), os.path.join(exportDir, target, self.name + '.br'))
+                
+                if (path.exists(os.path.join(tempFolder, 'Archives', config._name, config._cpuName, 'lib' + self.name + '.a'))):
+                    shutil.copyfile(os.path.join(tempFolder, 'Archives', config._name, config._cpuName, 'lib' + self.name + '.a'), os.path.join(exportDir, target, 'lib' + self.name + '.a'))
+                if (path.exists(os.path.join(self._projectDir, 'Binaries', config._name, config._cpuName, self.name + '.br'))):
+                    shutil.copyfile(os.path.join(self._projectDir, 'Binaries', config._name, config._cpuName, self.name + '.br'), os.path.join(exportDir, target, self.name + '.br'))
 
             if (os.path.exists(os.path.join(str(directory), self.name, self._version))):
                 shutil.rmtree(os.path.join(str(directory), self.name, self._version))
