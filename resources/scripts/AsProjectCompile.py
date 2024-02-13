@@ -8,7 +8,7 @@ Returns : Build result
     1 = Warnings
     3 = Build Error
 
-Example: c:/projects/CICD/ASHelperScripts/AsProjectCompile.py "C:\projects\CICD\MachineWVD" "C:\projects\CICD\MachineWVD\Temp" "C:\projects\CICD\MachineWVD\output"
+Example: c:/projects/CICD/ASHelperScripts/AsProjectCompile.py "C:/projects/CICD/MachineWVD" "C:/projects/CICD/MachineWVD/Temp" "C:/projects/CICD/MachineWVD/output"
 
 """
 
@@ -45,16 +45,16 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
     for config in Project._configurations:
         if (Configuration == Project._configurations[config]._name) or (Configuration == 'all'):
             if (NoClean == False):
-                cleanCommand = (__compileAsPath + r'\Bin-en\BR.AS.Build.exe'
-                                    + ' "' + __projectPath + '\\' + Project.projectName + '"'
+                cleanCommand = (os.path.join(__compileAsPath, 'Bin-en', 'BR.AS.Build.exe')
+                                    + ' "' + os.path.join(__projectPath, Project.projectName) + '"'
                                     + ' -cleanAll'
                                     + ' -t ' + Project._configurations[config].TempDirectory()
                                     )
                 print(cleanCommand)
                 result = subprocess.run(cleanCommand, cwd=__projectPath, capture_output=True, text=True)
 
-            buildCommand = (__compileAsPath + r'\Bin-en\BR.AS.Build.exe'
-                                + ' "' + __projectPath + '\\' + Project.projectName + '"'
+            buildCommand = (os.path.join(__compileAsPath,  'Bin-en', 'BR.AS.Build.exe')
+                                + ' "' + os.path.join(__projectPath, Project.projectName) + '"'
                                 + ' -buildMode "Build"'
                                 + ' -c ' + Project._configurations[config]._name
                                 + ' -buildRUCPackage'
@@ -77,16 +77,16 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
 
             if (BuildPIP):
                 #create PIP
-                pilPath = __projectPath + '\\' + "CreatePIP.pil"
-                pilContents = 'CreatePIP "' + __projectPath + '\Binaries\\' + Project._configurations[config]._name + "\\" + Project._configurations[config]._cpuName + '\RUCPackage\RUCPackage.zip", "InstallMode=Consistent InstallRestriction=AllowUpdatesWithoutDataLoss KeepPVValues=1 ExecuteInitExit=0 IgnoreVersion=1 AllowDowngrade=0", "Default", "SupportLegacyAR=1", "DestinationDirectory=\'' + __projectPath + '\PIP\'"'
+                pilPath = os.path.join(__projectPath, "CreatePIP.pil")
+                pilContents = 'CreatePIP "' + os.path.join(__projectPath, 'Binaries', Project._configurations[config]._name, Project._configurations[config]._cpuName, 'RUCPackage', 'RUCPackage.zip'), "InstallMode=Consistent InstallRestriction=AllowUpdatesWithoutDataLoss KeepPVValues=1 ExecuteInitExit=0 IgnoreVersion=1 AllowDowngrade=0", "Default", "SupportLegacyAR=1", "DestinationDirectory=\'' + __projectPath + '\\PIP\\'"
                 pilFile = open(pilPath,"w")
                 pilFile.write(pilContents)
                 pilFile.close()
-                pviTransferPath = __PVIpath + r'\PVI\Tools\PVITransfer\PVITransfer.exe'
+                pviTransferPath = os.path.join(__PVIpath, 'PVI', 'Tools', 'PVITransfer', 'PVITransfer.exe')
                 pipCommand = (pviTransferPath + ' -silent "' + pilPath + '"')
                 result = subprocess.run(pipCommand, cwd=__projectPath, capture_output=True, text=True)
                 PrintErrorsAndWarnings(result.stdout.splitlines())
-                shutil.make_archive("PIP", 'zip', __projectPath + '\\' + "PIP")
+                shutil.make_archive("PIP", 'zip', os.path.join(__projectPath, "PIP"))
                 
     return buildResult
 
