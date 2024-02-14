@@ -12,7 +12,7 @@ def CreateSimulationTarget(Project, Configuration, ArSimDir) -> bool:
     print('Creating ArSim installation')
     __projectPath = Project._projectDir
     __compileAsPath = InstalledAS.ASInstallPath(Project)
-    if (__compileAsPath == ''):
+    if ((__compileAsPath == '') or (__compileAsPath == None)):
         return False
 
     cleanCommand = (__compileAsPath + r'\Bin-en\BR.AS.Build.exe'
@@ -36,10 +36,10 @@ def CreateSimulationTarget(Project, Configuration, ArSimDir) -> bool:
     __cpuName = Project._configurations[Configuration]._cpuName
 
     with open(f'{tempDir.name}\\createArSim.pil', 'x') as f:
-        f.write(f'CreateARsimStructure "{__projectPath}\\Binaries\\{Configuration}\\{__cpuName}\\RUCPackage\\RUCPackage.zip", "{ArSimDir}", "Start=-"')
+        f.write(f'OfflineCommissioning "{__projectPath}\\Binaries\\{Configuration}\\{__cpuName}\\RUCPackage\\RUCPackage.zip", "ARSim", "DestinationDirectory=\'{ArSimDir}\'", "Start=0"')
 
-    pviCmd = InstalledAS.PVIPath() + r'\PVI\Tools\PVITransfer\PVITransfer.exe'
-    pviOptions = rf'-silent "{tempDir.name}\createArSim.pil"'
+    pviCmd = InstalledAS.PVIPath(Project) + r'\PVI\Tools\PVITransfer\PVITransfer.exe'
+    pviOptions = rf'-silent "-{tempDir.name}\createArSim.pil"'
     subprocess.run(f'{pviCmd} {pviOptions}')
     print('ArSim created')
     return True
