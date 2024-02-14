@@ -17,7 +17,7 @@ def ASInstallPath(project):
 class InstalledAS:
   """Provides information on the installed Automation Studio versions"""
 
-  def PVI(projectVersion : str = ''):
+  def PVI(projectVersion = ''):
     REGISTRY = r'SOFTWARE\WOW6432Node' #This registry has information on installed programs
     Info = []
     PVI = ""

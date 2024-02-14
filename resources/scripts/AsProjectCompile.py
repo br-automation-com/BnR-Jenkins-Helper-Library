@@ -35,7 +35,7 @@ def PrintErrorsAndWarnings(output):
 def Compile(Project, Configuration, BuildPIP, NoClean):
     __projectPath = Project._projectDir
     __compileAsPath = InstalledAS.ASInstallPath(Project)
-    __PVIpath = InstalledAS.PVIPath()
+    __PVIpath = InstalledAS.PVIPath(Project)
     if (__compileAsPath == ''):
         print('no compatible AS installed')
         return [['', '', 3]]
