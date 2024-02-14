@@ -7,6 +7,7 @@ import sys
 import argparse
 import tempfile
 import re
+from packaging import version
 
 def CreateSimulationTarget(Project, Configuration, ArSimDir) -> bool:
     print('Creating ArSim installation')
@@ -36,7 +37,10 @@ def CreateSimulationTarget(Project, Configuration, ArSimDir) -> bool:
     __cpuName = Project._configurations[Configuration]._cpuName
 
     with open(f'{tempDir.name}\\createArSim.pil', 'x') as f:
-        f.write(f'OfflineCommissioning "{__projectPath}\\Binaries\\{Configuration}\\{__cpuName}\\RUCPackage\\RUCPackage.zip", "ARSim", "DestinationDirectory=\'{ArSimDir}\'", "Start=0"')
+        if (version.parse(Project.workingVersion) < version.parse("6.0")):
+            f.write(f'CreateARsimStructure "{__projectPath}\\Binaries\\{Configuration}\\{__cpuName}\\RUCPackage\\RUCPackage.zip", "{ArSimDir}", "Start=-"')
+        else:
+            f.write(f'OfflineCommissioning "{__projectPath}\\Binaries\\{Configuration}\\{__cpuName}\\RUCPackage\\RUCPackage.zip", "ARSim", "DestinationDirectory=\'{ArSimDir}\'", "Start=0"')
 
     pviCmd = InstalledAS.PVIPath(Project) + r'\PVI\Tools\PVITransfer\PVITransfer.exe'
     pviOptions = rf'-silent "-{tempDir.name}\createArSim.pil"'
