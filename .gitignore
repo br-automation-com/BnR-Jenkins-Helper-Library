@@ -1,1 +1,5 @@
 resources/scripts/__pycache__/
+site/
+resources/tests/__pycache__/
+.gradle/
+resources/scripts/.vs/
