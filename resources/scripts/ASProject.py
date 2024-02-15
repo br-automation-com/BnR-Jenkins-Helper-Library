@@ -16,7 +16,9 @@ import shutil
 from os.path import basename
 from DirUtils import removeDir
 from InstalledAS import InstalledAS
-    
+import glob
+from packaging import version
+
 class ModuleType(Enum):
     Unknown = 0
     DigitalInput = 1
@@ -324,12 +326,20 @@ class ASConfiguration:
             ns = {'': 'http://br-automation.com/AR/IO/HWD'}
             name = root.find('.//Hardware/Parameter[@ID="HwcShortName"]', ns).get('Value')
             
-            as_installation = InstalledAS.Info()[0][2]
-            ar_directory_name = self._arVersion.replace('.', '')
-            ar_directory_name = ar_directory_name[:1] + '0' + ar_directory_name[1:]
-            if os.path.exists(os.path.join(as_installation, 'System', ar_directory_name, 'SG4', 'ARM', f'@cf{name}.br')):
-                return CpuArchitecture.SG4_ARM
-            return CpuArchitecture.SG4_IA32
+            if (version.parse(self._arVersion) < version.parse("6.0")):
+                as_installation = InstalledAS.Info()[0][2]
+                ar_directory_name = self._arVersion.replace('.', '')
+                ar_directory_name = ar_directory_name[:1] + '0' + ar_directory_name[1:]
+                if os.path.exists(os.path.join(as_installation, 'System', ar_directory_name, 'SG4', 'ARM', f'@cf{name}.br')):
+                    return CpuArchitecture.SG4_ARM
+                return CpuArchitecture.SG4_IA32
+            else:
+                as_installation = r'C:\BrAutomation\AS6_ES\AS'
+                ar_directory_name = self._arVersion
+                if glob.glob(os.path.join(os.path.join(as_installation, 'System', ar_directory_name, 'SG4', 'ARM', f'@*{name}.br'))):
+                    return CpuArchitecture.SG4_ARM
+                return CpuArchitecture.SG4_IA32
+            
         return CpuArchitecture.Unknown
 
 class ASProject:
