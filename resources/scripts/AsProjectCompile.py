@@ -78,7 +78,7 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
             if (BuildPIP):
                 #create PIP
                 pilPath = os.path.join(__projectPath, "CreatePIP.pil")
-                pilContents = 'CreatePIP "' + os.path.join(__projectPath, 'Binaries', Project._configurations[config]._name, Project._configurations[config]._cpuName, 'RUCPackage', 'RUCPackage.zip'), "InstallMode=Consistent InstallRestriction=AllowUpdatesWithoutDataLoss KeepPVValues=1 ExecuteInitExit=0 IgnoreVersion=1 AllowDowngrade=0", "Default", "SupportLegacyAR=1", "DestinationDirectory=\'' + __projectPath + '\\PIP\\'"
+                pilContents = 'CreatePIP "' + os.path.join(__projectPath, 'Binaries', Project._configurations[config]._name, Project._configurations[config]._cpuName, 'RUCPackage', 'RUCPackage.zip') + ', "InstallMode=Consistent InstallRestriction=AllowUpdatesWithoutDataLoss KeepPVValues=1 ExecuteInitExit=0 IgnoreVersion=1 AllowDowngrade=0", "Default", "SupportLegacyAR=1", "DestinationDirectory=\'' + __projectPath + '\\PIP\\'
                 pilFile = open(pilPath,"w")
                 pilFile.write(pilContents)
                 pilFile.close()
