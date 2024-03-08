@@ -69,7 +69,7 @@ function GenerateJWT(){
     $expireTime = $currentTime + 300; # token is valid for 5 minutes 
     $currentTime = $currentTime - 10; # account for time drift between servers
     
-    if ($user -eq 'br-na-com'){
+    if ($user -eq 'br-na-pm'){
         $id = [System.Environment]::GetEnvironmentVariable('github-br-na-pm-id')
         $cert = [System.Environment]::GetEnvironmentVariable('github-br-na-pm-cert')
     }
