@@ -1,3 +1,5 @@
+#Requires -Version 7.0
+
 param([string]$tag, [string]$user, [string]$repo, [string]$file)
 
 function Upload([int]$releaseID, [string]$file)
