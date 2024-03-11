@@ -66,73 +66,8 @@ function CreateRelease([string]$tag)
     exit
 }
 
-function GenerateJWT(){
-    $currentTime = [int][double]::parse((Get-Date -Date $((Get-Date).ToUniversalTime()) -UFormat %s))
-    $expireTime = $currentTime + 300; # token is valid for 5 minutes 
-    $currentTime = $currentTime - 10; # account for time drift between servers
-    
-    if ($user -eq 'br-na-pm'){
-        $id = [System.Environment]::GetEnvironmentVariable('github-br-na-pm-id')
-        $cert = [System.Environment]::GetEnvironmentVariable('github-br-na-pm-cert')
-    }
-    elseif ($user -eq 'br-automation-com'){
-        $id = [System.Environment]::GetEnvironmentVariable('github-br-automation-com-id')
-        $cert = [System.Environment]::GetEnvironmentVariable('github-br-automation-com-cert')
-    }
-    else {
-        #github-id and github-cer need to be specified in the Jenkins environment variables on your installation
-        $id = [System.Environment]::GetEnvironmentVariable('github-id')
-        $cert = [System.Environment]::GetEnvironmentVariable('github-cer')
-    }
-
-    [hashtable]$header = @{alg = "RS256"; typ = "JWT"}
-
-    [hashtable]$payload = @{iat = $currentTime; exp = $expireTime; iss = $id }
-
-    $headerjson = $header | ConvertTo-Json -Compress
-    $payloadjson = $payload | ConvertTo-Json -Compress
-        
-    $headerjsonbase64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($headerjson)).Split('=')[0].Replace('+', '-').Replace('/', '_')
-    $payloadjsonbase64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($payloadjson)).Split('=')[0].Replace('+', '-').Replace('/', '_')
-
-    $data = $headerjsonbase64 + "." + $payloadjsonbase64
-
-    $privatePem = Get-Content -Path "$cert" -Raw
-
-    [System.Security.Cryptography.RSA]$rsa = New-Object System.Security.Cryptography.RSACryptoServiceProvider;
-    $rsa.ImportFromPEM($privatePem)
-       
-    $signature = [Convert]::ToBase64String(
-        $rsa.SignData(
-            [System.Text.Encoding]::UTF8.GetBytes($data),
-            [Security.Cryptography.HashAlgorithmName]::SHA256,
-            [Security.Cryptography.RSASignaturePadding]::Pkcs1
-        )
-    ).Split('=')[0].Replace('+', '-').Replace('/', '_')
-
-    $token = "$data.$signature"
-    $token
-}
-function GetAccessToken()
-{
-    $token = GenerateJWT 
-    $auth = @{"Authorization"="Bearer $token"}
-    
-    $installations = Invoke-WebRequest -Headers $auth -Method GET -Uri https://api.github.com/app/installations
-    ConvertFrom-Json $installations.Content | ForEach-Object {
-        $installationID = $_.id
-    }
-
-    $accessTokens = Invoke-WebRequest -Headers $auth -Method POST -Uri https://api.github.com/app/installations/$installationID/access_tokens
-    ConvertFrom-Json $accessTokens.Content | ForEach-Object {
-        $token = $_.token
-    }
-    
-    $token
-}
-
-$token = GetAccessToken
-$auth = @{"Authorization"="token $token"}
+$token = [System.Environment]::GetEnvironmentVariable('GITHUB_ACCESS_TOKEN')
+$auth = @{"Authorization"="Bearer $token"}
 
 $releaseID = FindRelease $tag
 if ($releaseID -eq 0) {
