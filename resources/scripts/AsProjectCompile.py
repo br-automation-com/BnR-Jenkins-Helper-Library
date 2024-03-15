@@ -50,7 +50,6 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
                                     + ' -cleanAll'
                                     + ' -t ' + Project._configurations[config].TempDirectory()
                                     )
-                print(cleanCommand)
                 result = subprocess.run(cleanCommand, cwd=__projectPath, capture_output=True, text=True)
 
             buildCommand = (os.path.join(__compileAsPath,  'Bin-en', 'BR.AS.Build.exe')
@@ -60,7 +59,6 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
                                 + ' -buildRUCPackage'
                                 + ' -t ' + Project._configurations[config].TempDirectory()
                                 )
-            print(buildCommand)
             result = subprocess.run(buildCommand, cwd=__projectPath, capture_output=True, text=True)
 
             #print(result.stdout)
@@ -78,7 +76,7 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
             if (BuildPIP):
                 #create PIP
                 pilPath = os.path.join(__projectPath, "CreatePIP.pil")
-                pilContents = 'CreatePIP "' + os.path.join(__projectPath, 'Binaries', Project._configurations[config]._name, Project._configurations[config]._cpuName, 'RUCPackage', 'RUCPackage.zip') + '", "InstallMode=Consistent InstallRestriction=AllowUpdatesWithoutDataLoss KeepPVValues=1 ExecuteInitExit=0 IgnoreVersion=1 AllowDowngrade=0", "Default", "SupportLegacyAR=1", "DestinationDirectory=\'' + __projectPath + 'PIP\'"'
+                pilContents = 'CreatePIP "' + os.path.join(__projectPath, 'Binaries', Project._configurations[config]._name, Project._configurations[config]._cpuName, 'RUCPackage', 'RUCPackage.zip') + '", "InstallMode=Consistent InstallRestriction=AllowUpdatesWithoutDataLoss KeepPVValues=1 ExecuteInitExit=0 IgnoreVersion=1 AllowDowngrade=0", "Default", "SupportLegacyAR=1", "DestinationDirectory=\'' + os.path.join(__projectPath, 'PIP\'"')
                 pilFile = open(pilPath,"w")
                 pilFile.write(pilContents)
                 pilFile.close()
