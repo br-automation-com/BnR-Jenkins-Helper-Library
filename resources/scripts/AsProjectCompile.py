@@ -59,8 +59,8 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
                                 + ' -buildMode "Build"'
                                 + ' -c ' + Project._configurations[config]._name
                                 )
-            print(buildCommand)
-            result = subprocess.run(buildCommand, cwd=__projectPath, capture_output=True, text=True)
+
+            result = subprocess.run(args=[os.path.join(__compileAsPath,  'Bin-en', 'BR.AS.Build.exe'), f'"{os.path.join(__projectPath, Project.projectName)}"', '-buildMode "Build"', f'-c {Project._configurations[config]._name}'], cwd=__projectPath, capture_output=True, text=True)
             print(result)
             print(result.stdout)
             errors = 0
