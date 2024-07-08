@@ -58,9 +58,6 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
                                 + ' "' + os.path.join(__projectPath, Project.projectName) + '"'
                                 + ' -buildMode "Build"'
                                 + ' -c ' + Project._configurations[config]._name
-                                + ' -buildRUCPackage'
-                                + ' -t ' + Project._configurations[config].TempDirectory()
-                                + ' -o ' + Project._configurations[config].BinariesDirectory()
                                 )
             print(buildCommand)
             result = subprocess.run(buildCommand, cwd=__projectPath, capture_output=True, text=True)
