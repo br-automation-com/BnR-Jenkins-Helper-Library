@@ -74,6 +74,8 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
                 if (errors > 0) or (warnings > 0):
                     PrintErrorsAndWarnings(output)
             buildResult.append([Project._configurations[config]._name, result.returncode, errors, warnings])
+            print(f'build result = {Project._configurations[config]._name} {result.returncode}, {errors}, {warnings}')
+            
 
             if (BuildPIP):
                 #create PIP
