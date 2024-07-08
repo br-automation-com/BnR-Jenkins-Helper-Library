@@ -60,13 +60,7 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
                                 + ' -c ' + Project._configurations[config]._name
                                 )
 
-            result = subprocess.run(['dir', 'c:\\temp'], shell=True)
-            print(result)
-
-            result = subprocess.run(['dir', 'c:\\temp'], shell=True, cwd=__projectPath)
-            print(result)
-
-            result = subprocess.run(args=[os.path.join(__compileAsPath,  'Bin-en', 'BR.AS.Build.exe')], cwd=__projectPath, capture_output=True, text=True)
+            result = subprocess.run(args=[os.path.join(__compileAsPath,  'Bin-en', 'BR.AS.Build.exe'), f'"{os.path.join(__projectPath, Project.projectName)}"', '-buildMode "Build"', f'-c {Project._configurations[config]._name}'], capture_output=True, text=True)
             print(result)
             print(result.stdout)
             errors = 0
