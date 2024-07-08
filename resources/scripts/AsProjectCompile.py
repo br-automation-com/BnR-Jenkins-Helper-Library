@@ -62,7 +62,7 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
                                 )
             print(buildCommand)
             result = subprocess.run(buildCommand, cwd=__projectPath, capture_output=True, text=True)
-
+            print(result)
             print(result.stdout)
             errors = 0
             warnings = 0
