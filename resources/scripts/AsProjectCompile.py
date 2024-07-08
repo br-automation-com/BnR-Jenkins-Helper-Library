@@ -49,6 +49,7 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
                                     + ' "' + os.path.join(__projectPath, Project.projectName) + '"'
                                     + ' -cleanAll'
                                     + ' -t ' + Project._configurations[config].TempDirectory()
+                                    + ' -o ' + Project._configurations[config].BinariesDirectory()
                                     )
                 print(cleanCommand)
                 result = subprocess.run(cleanCommand, cwd=__projectPath, capture_output=True, text=True)
@@ -59,6 +60,7 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
                                 + ' -c ' + Project._configurations[config]._name
                                 + ' -buildRUCPackage'
                                 + ' -t ' + Project._configurations[config].TempDirectory()
+                                + ' -o ' + Project._configurations[config].BinariesDirectory()
                                 )
             print(buildCommand)
             result = subprocess.run(buildCommand, cwd=__projectPath, capture_output=True, text=True)
@@ -80,7 +82,7 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
             if (BuildPIP):
                 #create PIP
                 pilPath = os.path.join(__projectPath, "CreatePIP.pil")
-                pilContents = 'CreatePIP "' + os.path.join(__projectPath, 'Binaries', Project._configurations[config]._name, Project._configurations[config]._cpuName, 'RUCPackage', 'RUCPackage.zip') + '", "InstallMode=Consistent InstallRestriction=AllowUpdatesWithoutDataLoss KeepPVValues=1 ExecuteInitExit=0 IgnoreVersion=1 AllowDowngrade=0", "Default", "SupportLegacyAR=1", "DestinationDirectory=\'' + __projectPath + 'PIP\'"'
+                pilContents = 'CreatePIP "' + os.path.join(__projectPath, Project._configurations[config].BinariesDirectory(), Project._configurations[config]._name, Project._configurations[config]._cpuName, 'RUCPackage', 'RUCPackage.zip') + '", "InstallMode=Consistent InstallRestriction=AllowUpdatesWithoutDataLoss KeepPVValues=1 ExecuteInitExit=0 IgnoreVersion=1 AllowDowngrade=0", "Default", "SupportLegacyAR=1", "DestinationDirectory=\'' + __projectPath + 'PIP\'"'
                 pilFile = open(pilPath,"w")
                 pilFile.write(pilContents)
                 pilFile.close()
