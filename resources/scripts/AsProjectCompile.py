@@ -44,24 +44,10 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
     regex = re.compile(r'Build: (\d+) error\(s\), (\d+) warning\(s\)')
     for config in Project._configurations:
         if (Configuration == Project._configurations[config]._name) or (Configuration == 'all'):
+            standard_commands = [os.path.join(__compileAsPath,  'Bin-en', 'BR.AS.Build.exe'), f'"{os.path.join(__projectPath, Project.projectName)}"', f'-c {Project._configurations[config]._name}', f'-t {Project._configurations[config].TempDirectory()}', f'-o {Project._configurations[config].BinariesDirectory()}']
             if (NoClean == False):
-                cleanCommand = (os.path.join(__compileAsPath, 'Bin-en', 'BR.AS.Build.exe')
-                                    + ' "' + os.path.join(__projectPath, Project.projectName) + '"'
-                                    + ' -cleanAll'
-                                    + ' -t ' + Project._configurations[config].TempDirectory()
-                                    )
-                result = subprocess.run(cleanCommand, cwd=__projectPath, capture_output=True, text=True)
-
-            buildCommand = (os.path.join(__compileAsPath,  'Bin-en', 'BR.AS.Build.exe')
-                                + ' "' + os.path.join(__projectPath, Project.projectName) + '"'
-                                + ' -buildMode "Build"'
-                                + ' -c ' + Project._configurations[config]._name
-                                + ' -buildRUCPackage'
-                                + ' -t ' + Project._configurations[config].TempDirectory()
-                                )
-            result = subprocess.run(buildCommand, cwd=__projectPath, capture_output=True, text=True)
-
-            #print(result.stdout)
+                result = subprocess.run(args=standard_commands + ['-cleanAll'], cwd=__projectPath, capture_output=True, text=True)
+            result = subprocess.run(args=standard_commands + ['-buildMode "Build"'], capture_output=True, text=True)
             errors = 0
             warnings = 0
             output = result.stdout.splitlines()
@@ -72,11 +58,12 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
                 if (errors > 0) or (warnings > 0):
                     PrintErrorsAndWarnings(output)
             buildResult.append([Project._configurations[config]._name, result.returncode, errors, warnings])
+            print(f'Build Result {Project._configurations[config]._name} = {result.returncode}')
 
             if (BuildPIP):
                 #create PIP
                 pilPath = os.path.join(__projectPath, "CreatePIP.pil")
-                pilContents = 'CreatePIP "' + os.path.join(__projectPath, 'Binaries', Project._configurations[config]._name, Project._configurations[config]._cpuName, 'RUCPackage', 'RUCPackage.zip') + '", "InstallMode=Consistent InstallRestriction=AllowUpdatesWithoutDataLoss KeepPVValues=1 ExecuteInitExit=0 IgnoreVersion=1 AllowDowngrade=0", "Default", "SupportLegacyAR=1", "DestinationDirectory=\'' + os.path.join(__projectPath, 'PIP\'"')
+                pilContents = 'CreatePIP "' + os.path.join(__projectPath, Project._configurations[config].BinariesDirectory(), Project._configurations[config]._name, Project._configurations[config]._cpuName, 'RUCPackage', 'RUCPackage.zip') + '", "InstallMode=Consistent InstallRestriction=AllowUpdatesWithoutDataLoss KeepPVValues=1 ExecuteInitExit=0 IgnoreVersion=1 AllowDowngrade=0", "Default", "SupportLegacyAR=1", "DestinationDirectory=\'' + __projectPath + 'PIP\'"'
                 pilFile = open(pilPath,"w")
                 pilFile.write(pilContents)
                 pilFile.close()

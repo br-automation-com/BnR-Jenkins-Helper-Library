@@ -57,7 +57,7 @@ class InstalledAS:
           asubkey = winreg.OpenKey(root_key,asubkey_name + r"\ControlStudio")
           BuRAutStudioVersion, null = winreg.QueryValueEx(asubkey, "ProgrVersion")
           Info.append((BuRAutStudioVersion,BuRAutStudioPath,BuRSharedFilesPath))#B&R has BuRAutStudioPath as shared path & BuRSharedFilesPath is the actual path
-          print(f'{asubkey_name} {BuRAutStudioPath} {BuRSharedFilesPath} {BuRAutStudioVersion}')
+          #print(f'{asubkey_name} {BuRAutStudioPath} {BuRSharedFilesPath} {BuRAutStudioVersion}')
       except EnvironmentError:
         break
     winreg.CloseKey(root_key)

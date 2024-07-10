@@ -263,7 +263,11 @@ class ASConfiguration:
     def TempDirectory(self):
         projectTemp = os.path.join(self._directory, '..', '..', 'Temp')
         return rf'{projectTemp}' if os.path.exists(projectTemp) else os.path.join('C:\\', 'Temp', self._name)
-    
+
+    def BinariesDirectory(self):
+        projectBin = os.path.join(self._directory, '..', '..', 'Binaries')
+        return rf'{projectBin}' if os.path.exists(projectBin) else os.path.join('C:\\', 'Temp', 'Binaries', self._name)
+
     def findIoModules(self):
         modules = [module for module in ET.parse(os.path.join(self._directory, 'Hardware.hw')).getroot().findall(IoModule.Namespace() + 'Module') if IoModule.isIoModule(module.get('Type'))]
         for m in modules:
