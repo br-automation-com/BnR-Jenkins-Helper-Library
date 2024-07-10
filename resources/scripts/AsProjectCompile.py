@@ -42,12 +42,14 @@ def Compile(Project, Configuration, BuildPIP, NoClean):
 
     buildResult = []
     regex = re.compile(r'Build: (\d+) error\(s\), (\d+) warning\(s\)')
-    for config in Project._configurations:
+
+    for config in Project._configurations:        
         if (Configuration == Project._configurations[config]._name) or (Configuration == 'all'):
-            standard_commands = [os.path.join(__compileAsPath,  'Bin-en', 'BR.AS.Build.exe'), f'"{os.path.join(__projectPath, Project.projectName)}"', f'-c {Project._configurations[config]._name}', f'-t {Project._configurations[config].TempDirectory()}', f'-o {Project._configurations[config].BinariesDirectory()}']
+            standard_commands = f'{os.path.join(__compileAsPath, "Bin-en", "BR.AS.Build.exe")} "{os.path.join(__projectPath, Project.projectName)}" -c {Project._configurations[config]._name} -t "{Project._configurations[config].TempDirectory()}" -o "{Project._configurations[config].BinariesDirectory()}"'
             if (NoClean == False):
-                result = subprocess.run(args=standard_commands + ['-cleanAll'], cwd=__projectPath, capture_output=True, text=True)
-            result = subprocess.run(args=standard_commands + ['-buildMode "Build"'], capture_output=True, text=True)
+                result = subprocess.run(standard_commands + ' -cleanAll', cwd=__projectPath, capture_output=True, text=True)
+            
+            result = subprocess.run(standard_commands + ' -buildMode "Build" -buildRUCPackage', capture_output=True, text=True)
             errors = 0
             warnings = 0
             output = result.stdout.splitlines()

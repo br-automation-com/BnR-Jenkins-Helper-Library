@@ -7,36 +7,21 @@ import sys
 import argparse
 import tempfile
 import re
+import os
+from AsProjectCompile import Compile
 
 def CreateSimulationTarget(Project, Configuration, ArSimDir) -> bool:
     print('Creating ArSim installation')
-    __projectPath = Project._projectDir
-    __compileAsPath = InstalledAS.ASInstallPath(Project)
-    if (__compileAsPath == ''):
-        return False
 
-    cleanCommand = (__compileAsPath + r'\Bin-en\BR.AS.Build.exe'
-                        + ' "' + __projectPath + '\\' + Project.projectName + '"'
-                        + ' -cleanAll'
-                        + ' -t ' + Project._configurations[Configuration].TempDirectory()
-                        )
-    result = subprocess.run(cleanCommand, cwd=__projectPath, capture_output=True, text=True)
-
-    buildCommand = (__compileAsPath + r'\Bin-en\BR.AS.Build.exe '
-                        + '"' + __projectPath + '\\' + Project.projectName + '"'
-                        + ' -buildMode "Build"'
-                        + ' -c ' + Project._configurations[Configuration]._name
-                        + ' -buildRUCPackage'
-                        + ' -t ' + Project._configurations[Configuration].TempDirectory()
-                        )
-    result = subprocess.run(buildCommand, cwd=__projectPath, capture_output=True, text=True)
-    print(result.stdout)
+    Compile(Project, Configuration, False, False)
 
     tempDir = tempfile.TemporaryDirectory()
     __cpuName = Project._configurations[Configuration]._cpuName
 
+    print(f'{Project._configurations[Configuration].BinariesDirectory()}')
+
     with open(f'{tempDir.name}\\createArSim.pil', 'x') as f:
-        f.write(f'CreateARsimStructure "{__projectPath}\\Binaries\\{Configuration}\\{__cpuName}\\RUCPackage\\RUCPackage.zip", "{ArSimDir}", "Start=-"')
+        f.write(f'CreateARsimStructure "{Project._configurations[Configuration].BinariesDirectory()}\\{Configuration}\\{__cpuName}\\RUCPackage\\RUCPackage.zip", "{ArSimDir}", "Start=-"')
 
     pviCmd = InstalledAS.PVIPath() + r'\PVI\Tools\PVITransfer\PVITransfer.exe'
     pviOptions = rf'-silent "{tempDir.name}\createArSim.pil"'
@@ -52,6 +37,7 @@ def main() -> None:
     args = parser.parse_args()
 
     project = ASProject.ASProject(args.projectDir)
+    print(f'{project._configurations[args.config].BinariesDirectory()}')
     result = CreateSimulationTarget(project, args.config, args.simulationDir)
     sys.exit(0)
     return
