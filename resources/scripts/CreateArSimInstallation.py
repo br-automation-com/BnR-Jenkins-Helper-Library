@@ -25,7 +25,8 @@ def CreateSimulationTarget(Project, Configuration, ArSimDir) -> bool:
 
     pviCmd = InstalledAS.PVIPath() + r'\PVI\Tools\PVITransfer\PVITransfer.exe'
     pviOptions = rf'-silent "{tempDir.name}\createArSim.pil"'
-    subprocess.run(f'{pviCmd} {pviOptions}')
+    result = subprocess.run(f'{pviCmd} {pviOptions}', capture_output=True)
+    print(result)
     print('ArSim created')
     return True
 
