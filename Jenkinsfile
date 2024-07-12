@@ -2,7 +2,7 @@ def TEAMS_CHANNEL_URL = "PasteYourURLhere"
 def EMAIL_LIST = "Wesley.Buchanan@br-automation.com;"
 
 pipeline {
-    agent any
+    agent { node { label 'gradle' } }
     tools
     {
         gradle '7.3.3'
