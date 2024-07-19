@@ -21,10 +21,10 @@ def CreateSimulationTarget(Project, Configuration, ArSimDir) -> bool:
     print(f'{Project._configurations[Configuration].BinariesDirectory()}')
 
     with open(f'{tempDir.name}\\createArSim.pil', 'x') as f:
-        f.write(f'OfflineCommissioning "{Project._configurations[Configuration].BinariesDirectory()}\\{Configuration}\\{__cpuName}\\RUCPackage\\RUCPackage.zip", "ARSim", "DestinationDirectory=\'{ArSimDir}\'", "Start=0"')
+        f.write(f'CreateARsimStructure "{Project._configurations[Configuration].BinariesDirectory()}\\{Configuration}\\{__cpuName}\\RUCPackage\\RUCPackage.zip", "{ArSimDir}", "Start=0"')
 
     pviCmd = InstalledAS.PVIPath() + r'\PVI\Tools\PVITransfer\PVITransfer.exe'
-    pviOptions = rf'-silent "{tempDir.name}\createArSim.pil"'
+    pviOptions = rf'-silent "{tempDir.name}\createArSim.pil" -consoleOutput'
     result = subprocess.run(f'{pviCmd} {pviOptions}', capture_output=True)
     print(result)
     print('ArSim created')
