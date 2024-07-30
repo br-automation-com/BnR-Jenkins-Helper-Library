@@ -10,10 +10,10 @@ import re
 import os
 from AsProjectCompile import Compile
 
-def CreateSimulationTarget(Project, Configuration, ArSimDir) -> bool:
+def CreateSimulationTarget(Project, Configuration, ArSimDir, Clean) -> bool:
     print('Creating ArSim installation')
 
-    Compile(Project, Configuration, False, False)
+    Compile(Project, Configuration, False, not Clean)
 
     tempDir = tempfile.TemporaryDirectory()
     __cpuName = Project._configurations[Configuration]._cpuName
@@ -30,18 +30,24 @@ def CreateSimulationTarget(Project, Configuration, ArSimDir) -> bool:
     print('ArSim created')
     return True
 
+def parse_bool(s: str) -> bool:
+    try:
+        return {'true': True, 'false': False}[s.lower()]
+    except KeyError:
+        raise argparse.ArgumentTypeError(s)
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--project', help='Project Directory', dest='projectDir', required=True)
     parser.add_argument('-c', '--configuration', help='Configuration to build', dest='config', required=True)
     parser.add_argument('-s', '--simulationDirectory', help='ArSim installation directory', dest='simulationDir', required=True)
+    parser.add_argument('-l', '--clean', help='Clean configuration', dest='clean', required=False, default=False, type=parse_bool)
     args = parser.parse_args()
 
     project = ASProject.ASProject(args.projectDir)
     print(f'{project._configurations[args.config].BinariesDirectory()}')
-    result = CreateSimulationTarget(project, args.config, args.simulationDir)
+    result = CreateSimulationTarget(project, args.config, args.simulationDir, args.clean)
     sys.exit(0)
-    return
 
 if __name__ == '__main__':
     main()

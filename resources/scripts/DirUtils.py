@@ -7,10 +7,10 @@ def removeDir(directory):
     try:
         if (os.path.exists(directory)):
             tempDirName = tempfile.TemporaryDirectory().name
-            os.rename(directory, tempDirName)
+            shutil.move(directory, tempDirName)
             shutil.rmtree(tempDirName)
-    except:
-        print('failed to remove directory')
+    except Exception as e:
+        print('failed to remove directory ', e)
         return
 
 def CleanDirectory(directory):
