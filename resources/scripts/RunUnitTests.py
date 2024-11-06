@@ -62,7 +62,7 @@ def readTests(port) -> []:
     resp = requests.get(f'http://127.0.0.1:{port}/WsTest/')
     if (resp.status_code != requests.codes.ok):
         return []
-    #print('found these tests available')
+    print('found these tests available')
     availableTests = []
     for test in resp.json()['itemList']:
         availableTests.append(test['device'])
