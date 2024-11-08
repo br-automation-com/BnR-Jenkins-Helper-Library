@@ -6,6 +6,7 @@ def call(Map config = [:]){
     powershell(script: "python '${GetResources()}/scripts/CreateArSimInstallation.py' --project '${config.project}' --configuration '${config.configuration}' --simulationDirectory '${config.project}/ArSim'");
     powershell(script: "python '${GetResources()}/scripts/StartArSim.py' --simulationDirectory '${config.project}/ArSim'");
     echo "ArSim Started"
+    echo "running command python '${GetResources()}/scripts/RunUnitTests.py' --test ${config.tests} --output '${config.project}/${config.output}' --port ${config.port}"
     powershell(script: "python '${GetResources()}/scripts/RunUnitTests.py' --test ${config.tests} --output '${config.project}/${config.output}' --port ${config.port}");
     echo "Unittest finished"
     powershell(script: "python '${GetResources()}/scripts/StopArSim.py' --simulationDirectory '${config.project}/ArSim'");
