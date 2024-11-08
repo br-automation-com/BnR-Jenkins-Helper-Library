@@ -6,7 +6,7 @@ from subprocess import call
 from DirUtils import CleanDirectory
 
 def convertGcovFiles(project: ASProject, config):
-    ElfGcov = fr'C:\BrAutomation\AS{project.workingVersion.replace(".","")}\AS\gnuinst\V6.3.0\4.9\bin\i686-elf-gcov.exe'
+    ElfGcov = fr'C:\BrAutomation\AS{project.workingVersion.replace(".","")}\AS\gnuinst\V11.3.0\6.0\bin\i686-elf-gcov.exe'
     pattern = project._configurations[config].TempDirectory() + '/**/*.gcda'
     for file_name in glob.glob(pattern, recursive=True):
         if path.isfile(file_name):
