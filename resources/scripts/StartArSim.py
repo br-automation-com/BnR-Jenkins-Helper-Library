@@ -29,7 +29,7 @@ def waitForRunMode(s) -> bool:
         if (maxRetries <= 0):
             print('ArSim did not start')
             return False
-        print('Checking for ArSim Run mode')
+        #print('Checking for ArSim Run mode')
         try:
             s.send(b'<Status Command="10"/>')
             data = s.recv(1024)

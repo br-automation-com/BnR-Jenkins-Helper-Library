@@ -7,7 +7,9 @@ def call(Map config = [:]){
     powershell(script: "python '${GetResources()}/scripts/StartArSim.py' --simulationDirectory '${config.project}/ArSim'");
     echo "ArSim Started"
     powershell(script: "python '${GetResources()}/scripts/RunUnitTests.py' --test ${config.tests} --output '${config.project}/${config.output}' --port ${config.port}");
+    echo "Unittest finished"
     powershell(script: "python '${GetResources()}/scripts/StopArSim.py' --simulationDirectory '${config.project}/ArSim'");
+    echo "ArSim Stoped"
     powershell(script: "python '${GetResources()}/scripts/ProcessCodeCoverage.py' --project '${config.project}' --config '${config.configuration}'")    
     if (findFiles( glob: '**/*.gcov').length > 0) {
         recordCoverage(sourceDirectories: [[path: "$PROJECT_DIR"]], tools: [[parser: 'COBERTURA', pattern: '**/report.xml']])
