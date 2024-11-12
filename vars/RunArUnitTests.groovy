@@ -3,6 +3,7 @@ def call(Map config = [:]){
 	config.configuration = config.configuration  ?: 'UnitTest'
     config.output = config.output ?: 'TestResults'
     config.port = config.port ?: 80
+    powershell(script: "Remove-Item -Recurse '${config.project}/ArSim'");
     powershell(script: "python '${GetResources()}/scripts/CreateArSimInstallation.py' --project '${config.project}' --configuration '${config.configuration}' --simulationDirectory '${config.project}/ArSim'");
     powershell(script: "python '${GetResources()}/scripts/StartArSim.py' --simulationDirectory '${config.project}/ArSim'");
     echo "ArSim Started"
