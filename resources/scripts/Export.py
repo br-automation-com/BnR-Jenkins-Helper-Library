@@ -259,6 +259,12 @@ def fileExport(export, exportDir):
         for f in export['files']:
             copy(exportDir, f)
 
+def parse_bool(s: str) -> bool:
+    try:
+        return {'true': True, 'false': False}[s.lower()]
+    except KeyError:
+        raise argparse.ArgumentTypeError(s)
+    
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--project', help='Project Directory', dest='project', required=True)
@@ -266,6 +272,7 @@ def main() -> None:
     parser.add_argument('-s', '--physical', help='Physical Directory', dest='physical', required=True)
     parser.add_argument('-o', '--output', help='Output Directory', dest='output', required=True)
     parser.add_argument('-z', '--zip', help='zip output directory', dest='zip', required=False, default=True)
+    parser.add_argument('-v', '--vc4', help='export VC4 files', dest='vc4', required=False, default=True, type=parse_bool)
     global projectPath
     global physicalDir
     args = parser.parse_args()
@@ -313,7 +320,7 @@ def main() -> None:
         else:
             shutil.copytree(exportDir, os.path.join(args.output, Path(args.config).stem + 'MappView'))
 
-    if ('VC4' in export) == True:
+    if ((args.vc4 == True) and (('VC4' in export) == True)):
         physicalDir = args.physical + 'VC4'
         CleanDirectory(exportDir)
         libraries = []
