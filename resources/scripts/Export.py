@@ -222,7 +222,9 @@ def cleanPackage(exportName, exportDir, compileLibraries):
             exportPackageFile = glob.glob(os.path.join(root, name) + '\\*.pkg')
             projectPackageFile = glob.glob(os.path.join(projectPath, relativePath) + '\\*.pkg')
             if ((len(exportPackageFile) == 0) and (len(projectPackageFile) != 0)):
+                # copy the package file if it is needed but not there
                 shutil.copy(os.path.join(projectPath, relativePath, Path(projectPackageFile[0]).name), os.path.join(exportDir, relativePath, Path(projectPackageFile[0]).name))
+            if (len(projectPackageFile) != 0):
                 cleanPackageFile(os.path.join(exportDir, relativePath), Path(projectPackageFile[0]).name, compileLibraries)
 
 def standardExport(export, exportDir, project, tasks, libraries = []):
