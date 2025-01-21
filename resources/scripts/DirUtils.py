@@ -15,8 +15,17 @@ def removeDir(directory):
 
 def CleanDirectory(directory):
     CreateDirectory(directory)
-    contents = [os.path.join(directory, i) for i in os.listdir(directory)]
-    [os.remove(i) if os.path.isfile(i) or os.path.islink(i) else shutil.rmtree(i) for i in contents]
+    count = 0
+    while True:
+        try:
+            count += 1
+            contents = [os.path.join(directory, i) for i in os.listdir(directory)]
+            [os.remove(i) if os.path.isfile(i) or os.path.islink(i) else shutil.rmtree(i) for i in contents]
+            break
+        except:
+            if (count > 10):
+                break
+            pass
 
 def CreateDirectory(directory):
     if (os.path.exists(directory) == False):
