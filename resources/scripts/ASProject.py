@@ -17,7 +17,7 @@ from os.path import basename
 from DirUtils import removeDir
 from InstalledAS import InstalledAS
 import glob
-from packaging import version
+from packaging import version as packagingVersion
 
 class ModuleType(Enum):
     Unknown = 0
@@ -387,6 +387,8 @@ class ASProject:
         try:
             asVersion = version.split('.')[0] + '.' + version.split('.')[1]
             projectVersion = self.version.split('.')[0] + '.' + self.version.split('.')[1]
+            if ((packagingVersion.parse(projectVersion) >= packagingVersion.parse('6.0')) and (packagingVersion.parse(asVersion) >= packagingVersion.parse('6.0'))):
+                return True
             return (projectVersion == asVersion)
         except:
             return False
