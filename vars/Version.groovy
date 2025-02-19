@@ -43,6 +43,12 @@ def call(Map config = [:]) {
     def major = match[0][1]
     def minor = Integer.parseInt(match[0][2]) + 1
     def bugfix = match[0][3]
+
+    if (minor == 100) {
+        minor = 0
+        major = Integer.parseInt(major) + 1
+    }
+    
     tag = "${major}.${minor}.${bugfix}"
     print "$tag"
     return "$tag.$count"
