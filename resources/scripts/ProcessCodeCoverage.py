@@ -4,6 +4,8 @@ import glob
 from os import path, system, chdir
 from subprocess import call
 from DirUtils import CleanDirectory
+import sys
+from gcovr import __main__ as gcovr
 
 def convertGcovFiles(project: ASProject, config):
     ElfGcov = fr'C:\BrAutomation\AS{project.workingVersion.replace(".","")}\AS\gnuinst\V6.3.0\4.9\bin\i686-elf-gcov.exe'
@@ -29,9 +31,11 @@ def main():
     CleanDirectory(output)
     chdir(output)
     convertGcovFiles(project, args.config)
-    
-    system(f'py -m gcovr -g -k --root "{args.projectDir}" --html --html-details -o report.html')
-    system(f'py -m gcovr -g -k --root "{args.projectDir}" --xml-pretty -o report.xml')
 
+    gcovr.main(['-g', '-k', '--root', args.projectDir, '--html', '--html-details', '-o', 'report.html'])
+    gcovr.main(['-g', '-k', '--root', args.projectDir, '--xml-pretty', '-o', 'report.xml'])
+
+    sys.exit(0)
+    
 if __name__ == '__main__':
     main()
