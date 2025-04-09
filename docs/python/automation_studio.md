@@ -159,7 +159,7 @@ Starts an ArSim instance and wait for it to be in run mode before returning
 
 **Usage:**
 ``` console 
-    python StartArSim.py --simulationDirectory C:\ArSim
+    python StartArSim.py --simulationDirectory C:\ArSim --timeZoom +1
 ```
 
 **Options:**

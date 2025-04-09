@@ -5,7 +5,7 @@
 Starts an ArSim instance and runs the available unit tests
 **Usage:**
 ```
-RunArUnitTests(project: "$PROJECT_DIR", configuration: "UnitTest", tests: "all", output: 'TestResults', port: 80);
+RunArUnitTests(project: "$PROJECT_DIR", configuration: "UnitTest", tests: "all", output: 'TestResults', port: 80, timezoom:'0');
 ```
 
 **Options:**
@@ -23,7 +23,7 @@ RunArUnitTests(project: "$PROJECT_DIR", configuration: "UnitTest", tests: "all",
 Runs the mapp View integration tests
 **Usage:**
 ```
-RunMappViewIntegrationTests(project: "$PROJECT_DIR", configuration: "Simulation", integrationTestDir: "IntegrationTests");
+RunMappViewIntegrationTests(project: "$PROJECT_DIR", configuration: "Simulation", integrationTestDir: "IntegrationTests", timezoom:'0');
 ```
 
 **Options:**
