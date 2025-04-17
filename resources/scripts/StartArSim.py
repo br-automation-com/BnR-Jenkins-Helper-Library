@@ -5,9 +5,9 @@ import time
 import socket
 from subprocess import Popen
 
-def launchArSim(simulationDir) -> socket:
-    print('starting ArSim')
-    Popen(f'"{simulationDir}\\ar000loader.exe" -i127.0.0.1 -p4003', shell=False)
+def launchArSim(simulationDir, timeZoom) -> socket:
+    print('starting ArSim with timeZoom =', timeZoom)
+    Popen(f'"{simulationDir}\\ar000loader.exe" -i127.0.0.1 -p4003 -f{timeZoom}', shell=False)
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     connected = False
@@ -46,9 +46,10 @@ def waitForRunMode(s) -> bool:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--simulationDirectory', help='ArSim installation directory', dest='simulationDir', required=True)
+    parser.add_argument('-t', '--timeZoom', help='TimeZoom for Simulator', dest='timeZoom', default='0', required=False)
     args = parser.parse_args()
 
-    s = launchArSim(args.simulationDir)
+    s = launchArSim(args.simulationDir, args.timeZoom)
     returnVal = waitForRunMode(s)
     time.sleep(5)
     sys.exit(0 if (returnVal == True) else 1)
